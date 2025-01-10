@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.SplashScreen.MySplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#D9E2FF</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_mood</item>
+        <item name="postSplashScreenTheme">@style/Theme.EchoJournal</item>
+    </style>
+</resources>

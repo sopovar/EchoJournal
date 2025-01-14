@@ -1,0 +1,13 @@
+package ge.sopovardidze.echojournal.presentation.entries.components.comp_playground
+
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import ge.sopovardidze.echojournal.R
+
+data class CircleParameters(
+    val radius: Dp,
+    val backgroundColor: Color,
+    val stroke: StrokeParameters? = null,
+    @DrawableRes val icon: Int? = R.drawable.ic_mood_sad
+)

@@ -26,3 +26,18 @@ val Error95 = Color(0xFFFFEDEC)
 val Error100 = Color(0xFFFFEDEC)
 
 val Shadow = Color(0xFF474F60)
+
+val AngryStart = Color(0xFFF69193)
+val AngryEnd = Color(0xFFED3A3A)
+
+val SadStart = Color(0xFF7BBCFA)
+val SadEnd = Color(0xFF2993F7)
+
+val NeutralStart = Color(0xFFC4F3DB)
+val NeutralEnd = Color(0xFF71EBAC)
+
+val PeacefulStart = Color(0xFFFCCDEE)
+val PeacefulEnd = Color(0xFFF991E0)
+
+val ExcitedStart = Color(0xFFF5CB6F)
+val ExcitedEnd = Color(0xFFF6B01A)

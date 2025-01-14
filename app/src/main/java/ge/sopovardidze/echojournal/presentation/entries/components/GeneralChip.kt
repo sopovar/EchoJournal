@@ -50,10 +50,6 @@ fun GeneralChip(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .padding(
-                vertical = 2.dp,
-                horizontal = 4.dp
-            )
             .then(
                 if (!isSelected && isEmpty) {
                     Modifier
@@ -87,7 +83,7 @@ fun GeneralChip(
             )
         } else {
             content()
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(8.dp))
             Image(
                 painter = painterResource(R.drawable.ic_trailing_icon),
                 contentDescription = "clearAll",

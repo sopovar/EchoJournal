@@ -40,7 +40,7 @@ fun FilterItem(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = if (mood.seleted) SurfaceTint5.copy(alpha = 0.05f) else White,
+                color = if (mood.selected) SurfaceTint5.copy(alpha = 0.05f) else White,
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 10.dp, vertical = 6.dp)
@@ -61,7 +61,7 @@ fun FilterItem(
             text = mood.name,
             color = Secondary10
         )
-        if (mood.seleted) {
+        if (mood.selected) {
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 painter = painterResource(R.drawable.ic_check),

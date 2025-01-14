@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 fun TimelineNode(
     circleParameters: CircleParameters,
     lineParameters: LineParameters?,
-    contentStartOffset: Dp = 32.dp,
+    contentStartOffset: Dp = 16.dp,
     spacerBetweenNodes: Dp = 32.dp,
     iconSize: Dp? = 32.dp,
     content: @Composable BoxScope.(modifier: Modifier) -> Unit
@@ -39,22 +39,6 @@ fun TimelineNode(
                         start = Offset(x = circleRadiusInPx, y = circleRadiusInPx * 2),
                         end = Offset(x = circleRadiusInPx, y = this.size.height),
                         strokeWidth = it.strokeWidth.toPx()
-                    )
-                }
-
-                drawCircle(
-                    circleParameters.backgroundColor,
-                    circleRadiusInPx,
-                    center = Offset(x = circleRadiusInPx, y = circleRadiusInPx)
-                )
-
-                circleParameters.stroke?.let { stroke ->
-                    val strokeWidthInPx = stroke.width.toPx()
-                    drawCircle(
-                        color = stroke.color,
-                        radius = circleRadiusInPx - strokeWidthInPx / 2,
-                        center = Offset(x = circleRadiusInPx, y = circleRadiusInPx),
-                        style = Stroke(width = strokeWidthInPx)
                     )
                 }
 

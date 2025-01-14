@@ -192,7 +192,7 @@ object Constants {
         val red = Random.nextFloat()
         val green = Random.nextFloat()
         val blue = Random.nextFloat()
-        val alpha = 0.5f // Alpha value of 0.5
+        val alpha = 0.7f // Alpha value of 0.5
 
         return Color(red, green, blue, alpha)
     }

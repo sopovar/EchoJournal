@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,13 +28,14 @@ import ge.sopovardidze.echojournal.ui.theme.Shadow
 fun RecordContent(
     modifier: Modifier = Modifier,
     model: RecordModel? = null,
+    index: Int
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(horizontal = 16.dp)
+        modifier = modifier.fillMaxSize().padding(horizontal = 0.dp)
     ) {
         Box(
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(vertical = 0.dp)
                 .fillMaxWidth()
                 .dropShadow(
                     shape = RoundedCornerShape(10.dp),
@@ -51,12 +53,16 @@ fun RecordContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
+                    .height(150.dp)
                     .padding(vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "Item ${model?.title}"
+                    text = "Item ${model?.title} "
+                )
+                Text(
+                    text = "#${index}",
+                    style = MaterialTheme.typography.headlineLarge
                 )
             }
         }
@@ -70,7 +76,7 @@ private fun RecordContentPreview() {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            RecordContent()
+            RecordContent(index = 2)
         }
     }
 }

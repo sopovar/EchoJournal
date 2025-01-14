@@ -24,7 +24,7 @@ import ge.sopovardidze.echojournal.ui.theme.Secondary80
 private fun MessageBubble(modifier: Modifier, containerColor: Color) {
     Card(
         modifier = modifier
-            .width(200.dp)
+            .fillMaxWidth()
             .height(100.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor)
     ) {}
@@ -83,30 +83,5 @@ private fun TimelinePreview() {
                 }
             }
         }
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(16.dp)
-//        ) {
-//            val radius = 12.dp
-//            TimelineNode(
-//                circleParameters = CircleParameters(radius, Secondary50),
-//                lineParameters = LineParametersDefaults.linearGradient(
-//                    startColor = Secondary50,
-//                    endColor = Purple80
-//                )
-//            ) { modifier -> MessageBubble(modifier, containerColor = Secondary50) }
-//            TimelineNode(
-//                circleParameters = CircleParameters(radius, Purple80),
-//                lineParameters = LineParametersDefaults.linearGradient(
-//                    startColor = Purple80,
-//                    endColor = Secondary80
-//                )
-//            ) { modifier -> MessageBubble(modifier, containerColor = Purple80) }
-//            TimelineNode(
-//                circleParameters = CircleParameters(radius, Secondary80),
-//                lineParameters = null
-//            ) { modifier -> MessageBubble(modifier, containerColor = Secondary80) }
-//        }
     }
 }

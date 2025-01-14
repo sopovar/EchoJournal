@@ -16,7 +16,7 @@ fun RecordHeader(
     title: String
 ) {
     Column(
-        modifier = modifier.padding(top = 24.dp).fillMaxWidth().padding(horizontal = 16.dp)
+        modifier = modifier.padding(bottom = 16.dp).fillMaxWidth()
     ) {
         Text(
             text = title.uppercase(),

@@ -8,5 +8,5 @@ data class EntriesUiState(
     val topicsList: List<FilterType.Topics> = mockTopics,
     val isMoodChipActive: Boolean = false,
     val isTopicsChipActive: Boolean = false,
-    val pageIsEmpty: Boolean = true
+    val pageIsEmpty: Boolean = false
 )

@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
+import ge.sopovardidze.echojournal.presentation.entries.components.EchoFilter
 import ge.sopovardidze.echojournal.presentation.entries.model.EntriesUiState
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 
@@ -58,7 +59,7 @@ import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 fun EntriesListScreen(
     modifier: Modifier = Modifier,
     state: EntriesUiState,
-    onAction: (EntriesListAction) -> Unit
+    onAction: (EntriesListAction) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -97,14 +98,14 @@ fun EntriesListScreen(
             }
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (state.pageIsEmpty) {
+        if (state.pageIsEmpty) {
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 Image(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_empty),
                     contentDescription = "Empty"
@@ -120,10 +121,19 @@ fun EntriesListScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-            } else {
-                Text(
-                    text = "Page is NOT empty !!",
-                    style = MaterialTheme.typography.headlineMedium
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                EchoFilter(
+                    state = state,
+                    action = {
+                        onAction.invoke(it)
+                    }
                 )
             }
         }

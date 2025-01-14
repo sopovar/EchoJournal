@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -31,17 +25,14 @@ import ge.sopovardidze.echojournal.presentation.entries.model.EntriesUiState
 import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.Shadow
-import kotlin.math.truncate
 
 
 @Composable
-fun MoodFilter(
+fun EchoFilter(
     modifier: Modifier = Modifier,
     state: EntriesUiState,
     action: (EntriesListAction) -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(true) }
-
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -135,7 +126,7 @@ private fun MoodFilterPreview() {
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
                     .padding(24.dp)
             ) {
-                MoodFilter(
+                EchoFilter(
                     state = EntriesUiState().copy(isMoodChipActive = true),
                     action = {}
                 )

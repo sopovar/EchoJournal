@@ -16,31 +16,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
-import ge.sopovardidze.echojournal.presentation.entries.model.MoodModel
+import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.Secondary10
 
 @Composable
 fun MoodChip(
     modifier: Modifier = Modifier,
-    selectedMoods: List<MoodModel>,
+    moodList: List<FilterType.Mood>,
     isSelected: Boolean = true,
-    onMoodClick: () -> Unit,
+    onMoodChipClick: () -> Unit,
     onClearAll: () -> Unit,
 ) {
     GeneralChip(
         modifier = modifier,
         title = "All Moods",
         isSelected = isSelected,
-        isEmpty = selectedMoods.isEmpty(),
-        onChipClick = onMoodClick,
+        isEmpty = moodList.isEmpty(),
+        onChipClick = onMoodChipClick,
         onClearAll = onClearAll,
     ) {
-        val selectedMoodTitles = selectedMoods.map { it.mood }.joinToString(", ")
-        selectedMoods.forEachIndexed { index, mood ->
+        val selectedMoodTitles = moodList.map { it.title }.joinToString(", ")
+        moodList.forEachIndexed { index, mood ->
             Image(
                 painter = painterResource(mood.iconRes),
-                contentDescription = mood.mood,
+                contentDescription = mood.title,
                 modifier = Modifier
                     .size(22.dp)
                     .offset(
@@ -68,21 +68,21 @@ private fun MoodChipPreview() {
 
                 ) {
                 val mockMoodList = listOf(
-                    MoodModel(
-                        mood = "Neutral",
-                        iconRes = R.drawable.ic_mood_neutral,
+                    FilterType.Mood(
+                        title = "Neutral",
+                        icon = R.drawable.ic_mood_neutral,
                         isSelected = true
                     ),
-                    MoodModel(
-                        mood = "Sad",
-                        iconRes = R.drawable.ic_mood_sad,
+                    FilterType.Mood(
+                        title = "Sad",
+                        icon = R.drawable.ic_mood_sad,
                         isSelected = true
                     ),
                 )
                 MoodChip(
-                    selectedMoods = mockMoodList,
+                    moodList = mockMoodList,
                     isSelected = false,
-                    onMoodClick = {},
+                    onMoodChipClick = {},
                     onClearAll = {},
                 )
             }

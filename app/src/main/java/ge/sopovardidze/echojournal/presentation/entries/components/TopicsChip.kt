@@ -11,31 +11,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ge.sopovardidze.echojournal.core.Constants.mockTopics
+import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.Secondary10
 
 @Composable
 fun TopicsChip(
     modifier: Modifier = Modifier,
-    selectedTopics: List<String>,
-    isSelected: Boolean = true,
+    selectedTopics: List<FilterType.Topics>,
+    isChipActive: Boolean = true,
     onTopicClick: () -> Unit,
     onClearAll: () -> Unit,
 ) {
     GeneralChip(
         modifier = modifier,
         title = "All Topics",
-        isSelected = isSelected,
+        isSelected = isChipActive,
         isEmpty = selectedTopics.isEmpty(),
         onChipClick = onTopicClick,
         onClearAll = onClearAll,
     ) {
+        val selectedTopicsTitles = selectedTopics.filter { it.isSelected }.map { it.title }
         val selectedTopicsTitle = when {
-            selectedTopics.isEmpty() -> ""
-            selectedTopics.size <= 2 -> selectedTopics.joinToString(", ")
+            selectedTopicsTitles.isEmpty() -> ""
+            selectedTopicsTitles.size <= 2 -> selectedTopicsTitles.joinToString(", ")
             else -> {
-                val visibleItems = selectedTopics.take(2).joinToString(", ")
-                "$visibleItems +${selectedTopics.size - 2}"
+                val visibleItems = selectedTopicsTitles.take(2).joinToString(", ")
+                "$visibleItems +${selectedTopicsTitles.size - 2}"
             }
         }
         Text(
@@ -56,15 +59,9 @@ private fun TopicsChipPreview() {
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
                     .padding(24.dp)
             ) {
-                val mockMoodList = listOf(
-                    "Family",
-                    "Love",
-                    "Work",
-                    "Friends",
-                )
                 TopicsChip(
-                    selectedTopics = mockMoodList,
-                    isSelected = false,
+                    selectedTopics = mockTopics,
+                    isChipActive = false,
                     onTopicClick = {},
                     onClearAll = {},
                 )

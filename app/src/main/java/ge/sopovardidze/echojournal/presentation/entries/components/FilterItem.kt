@@ -2,12 +2,12 @@ package ge.sopovardidze.echojournal.presentation.entries.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,41 +25,43 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
-import ge.sopovardidze.echojournal.presentation.entries.model.MoodModel
+import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.Secondary10
 import ge.sopovardidze.echojournal.ui.theme.SurfaceTint5
 
 @Composable
-fun MoodFilterItem(
+fun FilterItem(
     modifier: Modifier = Modifier,
-    mood: MoodModel,
-    onSelected: (Boolean) -> Unit,
+    mood: FilterType,
+    onSelectionChange: (FilterType) -> Unit,
 ) {
-
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = if (mood.isSelected) SurfaceTint5.copy(alpha = 0.05f) else White,
+                color = if (mood.seleted) SurfaceTint5.copy(alpha = 0.05f) else White,
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 10.dp, vertical = 6.dp)
-            .clip(shape = RoundedCornerShape(8.dp)),
+            .clip(shape = RoundedCornerShape(8.dp))
+            .clickable {
+                onSelectionChange.invoke(mood)
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(mood.iconRes),
-            contentDescription = mood.mood,
+            contentDescription = mood.name,
             modifier = Modifier
                 .size(24.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = mood.mood,
+            text = mood.name,
             color = Secondary10
         )
-        if (mood.isSelected) {
+        if (mood.seleted) {
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 painter = painterResource(R.drawable.ic_check),
@@ -80,12 +82,13 @@ private fun MoodFilterItemPreview() {
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
                     .padding(24.dp)
             ) {
-                MoodFilterItem(
-                    mood = MoodModel(
+                FilterItem(
+                    mood = FilterType.Mood(
                         "Neutral",
                         R.drawable.ic_mood_neutral,
                         true
-                    ), onSelected = {}
+                    ),
+                    onSelectionChange = {}
                 )
             }
         }

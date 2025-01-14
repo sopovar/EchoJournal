@@ -51,11 +51,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
+import ge.sopovardidze.echojournal.presentation.entries.model.EntriesUiState
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 
 @Composable
 fun EntriesListScreen(
     modifier: Modifier = Modifier,
+    state: EntriesUiState,
+    onAction: (EntriesListAction) -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -80,7 +83,9 @@ fun EntriesListScreen(
         },
         floatingActionButton = {
             SmallFloatingActionButton(
-                onClick = { },
+                onClick = {
+                    onAction.invoke(EntriesListAction.OnFabClick)
+                },
                 shape = CircleShape,
                 containerColor = Color.Transparent,
                 elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp)
@@ -99,21 +104,28 @@ fun EntriesListScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_empty),
-                contentDescription = "Empty"
-            )
-            Spacer(Modifier.height(32.dp))
-            Text(
-                text = "No Entries",
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Start recording your first Echo ",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (state.pageIsEmpty) {
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_empty),
+                    contentDescription = "Empty"
+                )
+                Spacer(Modifier.height(32.dp))
+                Text(
+                    text = "No Entries",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Start recording your first Echo ",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                Text(
+                    text = "Page is NOT empty !!",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
         }
     }
 }
@@ -123,6 +135,11 @@ fun EntriesListScreen(
 @Composable
 private fun EntriesListScreenPreview() {
     EchoJournalTheme {
-        EntriesListScreen()
+        EntriesListScreen(
+            state = EntriesUiState(),
+            onAction = {
+
+            }
+        )
     }
 }

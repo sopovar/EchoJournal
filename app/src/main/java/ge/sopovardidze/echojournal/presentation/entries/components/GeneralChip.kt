@@ -87,7 +87,7 @@ fun GeneralChip(
             )
         } else {
             content()
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.weight(1f))
             Image(
                 painter = painterResource(R.drawable.ic_trailing_icon),
                 contentDescription = "clearAll",

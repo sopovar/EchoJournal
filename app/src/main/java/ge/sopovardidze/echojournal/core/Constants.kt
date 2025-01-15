@@ -18,6 +18,8 @@ import kotlin.random.Random
 
 object Constants {
 
+    const val TOP_PADDING = 200
+
     val mockMoodList = listOf(
         FilterType.Mood(
             title = "Excited",

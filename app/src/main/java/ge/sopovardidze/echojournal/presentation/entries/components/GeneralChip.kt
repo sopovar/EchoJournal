@@ -3,7 +3,6 @@ package ge.sopovardidze.echojournal.presentation.entries.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -24,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
 import ge.sopovardidze.echojournal.core.dropShadow
+import ge.sopovardidze.echojournal.core.noRippleClickable
 import ge.sopovardidze.echojournal.ui.theme.NeutralVariant80
 import ge.sopovardidze.echojournal.ui.theme.Secondary10
 import ge.sopovardidze.echojournal.ui.theme.Secondary50
@@ -71,7 +71,7 @@ fun GeneralChip(
                 shape = shape
             )
             .clip(shape = shape)
-            .clickable {
+            .noRippleClickable {
                 onChipClick.invoke()
             }
             .padding(vertical = 6.dp, horizontal = 12.dp)
@@ -87,7 +87,7 @@ fun GeneralChip(
             Image(
                 painter = painterResource(R.drawable.ic_trailing_icon),
                 contentDescription = "clearAll",
-                modifier = Modifier.clickable {
+                modifier = Modifier.noRippleClickable {
                     onClearAll.invoke()
                 }
             )

@@ -6,6 +6,8 @@ import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.presentation.entries.model.RecordModel
 import ge.sopovardidze.echojournal.ui.theme.AngryEnd
 import ge.sopovardidze.echojournal.ui.theme.AngryStart
+import ge.sopovardidze.echojournal.ui.theme.ExcitedEnd
+import ge.sopovardidze.echojournal.ui.theme.ExcitedStart
 import ge.sopovardidze.echojournal.ui.theme.NeutralEnd
 import ge.sopovardidze.echojournal.ui.theme.NeutralStart
 import ge.sopovardidze.echojournal.ui.theme.PeacefulEnd
@@ -13,7 +15,6 @@ import ge.sopovardidze.echojournal.ui.theme.PeacefulStart
 import ge.sopovardidze.echojournal.ui.theme.SadEnd
 import ge.sopovardidze.echojournal.ui.theme.SadStart
 import java.util.Calendar
-import java.util.UUID
 import kotlin.random.Random
 
 object Constants {
@@ -25,8 +26,8 @@ object Constants {
             title = "Excited",
             icon = R.drawable.ic_mood_excited,
             isSelected = true,
-            gradientStartColor = AngryStart,
-            gradientEndColor = AngryEnd
+            gradientStartColor = ExcitedStart,
+            gradientEndColor = ExcitedEnd
         ),
         FilterType.Mood(
             title = "Peaceful",
@@ -122,7 +123,7 @@ object Constants {
             mood = mockMoodList[1],
             topics = mockTopics.subList(1,2),
             title = "Yesterday’s Record 1",
-            description = "This is the first record for yesterday."
+            description = "This is the first record for yesterday. This is the first record for yesterday. This is the first record for yesterday. This is the first record for yesterday."
         ),
         RecordModel(
             id = "3",

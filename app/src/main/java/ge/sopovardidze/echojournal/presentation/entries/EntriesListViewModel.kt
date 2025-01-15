@@ -34,6 +34,19 @@ class EntriesListViewModel: ViewModel() {
             is EntriesListAction.OnTopicsSelectionChange -> {
                 updateTopic(action.mood)
             }
+
+            EntriesListAction.OnOutsideBoundsClick -> {
+                close()
+            }
+        }
+    }
+
+    private fun close() {
+        state.update {
+            it.copy(
+                isTopicsChipActive = false,
+                isMoodChipActive = false
+            )
         }
     }
 

@@ -10,4 +10,5 @@ sealed interface EntriesListAction {
     object OnMoodClear: EntriesListAction
     object OnTopicsClear: EntriesListAction
     object OnFabClick: EntriesListAction
+    object OnOutsideBoundsClick: EntriesListAction
 }

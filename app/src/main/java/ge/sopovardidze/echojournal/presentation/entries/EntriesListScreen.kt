@@ -3,6 +3,7 @@ package ge.sopovardidze.echojournal.presentation.entries
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -59,6 +63,7 @@ fun EntriesListScreen(
     onAction: (EntriesListAction) -> Unit,
 ) {
     var chipsHeight by remember { mutableStateOf(0) }
+    var filterBoxBounds by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
 
     Scaffold(
         modifier = modifier,
@@ -97,130 +102,154 @@ fun EntriesListScreen(
             }
         }
     ) { padding ->
-        if (state.pageIsEmpty) {
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_empty),
-                    contentDescription = "Empty"
-                )
-                Spacer(Modifier.height(32.dp))
-                Text(
-                    text = "No Entries",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = "Start recording your first Echo ",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(filterBoxBounds) {
+                    detectTapGestures { offset ->
+                        filterBoxBounds?.let {
+                            if (!it.contains(offset)) {
+                                Log.e("123123", "OUTSIDE CLICK ")
+                                onAction.invoke(EntriesListAction.OnOutsideBoundsClick)
+                            }
+                        }
+                    }
+                }
+        ) {
+
+            if (state.pageIsEmpty) {
                 Column(
                     modifier = Modifier
                         .padding(padding)
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Box(
+                    Image(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_empty),
+                        contentDescription = "Empty"
+                    )
+                    Spacer(Modifier.height(32.dp))
+                    Text(
+                        text = "No Entries",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = "Start recording your first Echo ",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .onSizeChanged { size ->
-                                chipsHeight = size.height + TOP_PADDING // More elegant way?
-                            }
+                            .padding(padding)
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        FlowRow(
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                                .onSizeChanged { size ->
+                                    chipsHeight = size.height + TOP_PADDING // More elegant way?
+                                }
                         ) {
-                            MoodChip(
-                                moodList = state.moodList.filter { it.isSelected },
-                                isSelected = state.isMoodChipActive,
-                                onMoodChipClick = {
-                                    onAction.invoke(EntriesListAction.OnMoodChipClick)
-                                },
-                                onClearAll = {
-                                    onAction.invoke(EntriesListAction.OnMoodClear)
-                                },
-                            )
-
-                            TopicsChip(
-                                selectedTopics = state.topicsList.filter { it.isSelected },
-                                isChipActive = state.isTopicsChipActive,
-                                onTopicClick = {
-                                    onAction.invoke(EntriesListAction.OnTopicsChipClick)
-                                },
-                                onClearAll = {
-                                    onAction.invoke(EntriesListAction.OnTopicsClear)
-                                },
-                            )
-                        }
-                    }
-                    RecordsList()
-                }
-                val listToShow = if (state.isMoodChipActive) {
-                    state.moodList
-                } else if (state.isTopicsChipActive) {
-                    state.topicsList
-                } else {
-                    emptyList()
-                }
-                if (listToShow.isNotEmpty()) {
-                    Log.e("123123", "chip height = ${chipsHeight}")
-                    Box(
-                        modifier = Modifier
-                            .padding(top = with(LocalDensity.current) { chipsHeight.toDp() })
-                            .fillMaxWidth()
-                            .dropShadow(
-                                shape = RoundedCornerShape(10.dp),
-                                color = Shadow.copy(0.2f),
-                                blur = 20.dp,
-                                offsetY = 6.dp
-                            )
-                            .background(
-                                color = White,
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
-                            .clip(shape = RoundedCornerShape(10.dp)),
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
-                        ) {
-                            listToShow.forEach { curMood ->
-                                FilterItem(
-                                    mood = curMood,
-                                    onSelectionChange = { filter ->
-                                        if (filter is FilterType.Mood) {
-                                            onAction.invoke(
-                                                EntriesListAction.OnMoodSelectionChange(
-                                                    filter
-                                                )
-                                            )
-                                        } else if (filter is FilterType.Topics) {
-                                            onAction.invoke(
-                                                EntriesListAction.OnTopicsSelectionChange(
-                                                    filter
-                                                )
-                                            )
-                                        }
-                                    }
+                            FlowRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                MoodChip(
+                                    moodList = state.moodList.filter { it.isSelected },
+                                    isSelected = state.isMoodChipActive,
+                                    onMoodChipClick = {
+                                        onAction.invoke(EntriesListAction.OnMoodChipClick)
+                                    },
+                                    onClearAll = {
+                                        onAction.invoke(EntriesListAction.OnMoodClear)
+                                    },
                                 )
+
+                                TopicsChip(
+                                    selectedTopics = state.topicsList.filter { it.isSelected },
+                                    isChipActive = state.isTopicsChipActive,
+                                    onTopicClick = {
+                                        onAction.invoke(EntriesListAction.OnTopicsChipClick)
+                                    },
+                                    onClearAll = {
+                                        onAction.invoke(EntriesListAction.OnTopicsClear)
+                                    },
+                                )
+                            }
+                        }
+                        RecordsList()
+                    }
+                    val listToShow = if (state.isMoodChipActive) {
+                        state.moodList
+                    } else if (state.isTopicsChipActive) {
+                        state.topicsList
+                    } else {
+                        emptyList()
+                    }
+                    if (listToShow.isNotEmpty()) {
+                        Log.e("123123", "chip height = ${chipsHeight}")
+                        Box(
+                            modifier = Modifier
+                                .padding(
+                                    top = with(LocalDensity.current) { chipsHeight.toDp() },
+                                    start = 16.dp,
+                                    end = 16.dp
+                                )
+                                .fillMaxWidth()
+                                .dropShadow(
+                                    shape = RoundedCornerShape(10.dp),
+                                    color = Shadow.copy(0.2f),
+                                    blur = 20.dp,
+                                    offsetY = 6.dp
+                                )
+                                .background(
+                                    color = White,
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                                .padding(horizontal = 10.dp, vertical = 6.dp)
+                                .clip(shape = RoundedCornerShape(10.dp))
+                                .onGloballyPositioned { layoutCoordinates ->
+                                    filterBoxBounds =
+                                        layoutCoordinates.boundsInRoot()
+                                },
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp),
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
+                            ) {
+                                listToShow.forEach { curMood ->
+                                    FilterItem(
+                                        mood = curMood,
+                                        onSelectionChange = { filter ->
+                                            if (filter is FilterType.Mood) {
+                                                onAction.invoke(
+                                                    EntriesListAction.OnMoodSelectionChange(
+                                                        filter
+                                                    )
+                                                )
+                                            } else if (filter is FilterType.Topics) {
+                                                onAction.invoke(
+                                                    EntriesListAction.OnTopicsSelectionChange(
+                                                        filter
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    )
+                                }
                             }
                         }
                     }

@@ -2,7 +2,6 @@ package ge.sopovardidze.echojournal.presentation.entries.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
+import ge.sopovardidze.echojournal.core.noRippleClickable
 import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.Secondary10
@@ -45,7 +45,7 @@ fun FilterItem(
             )
             .padding(horizontal = 10.dp, vertical = 6.dp)
             .clip(shape = RoundedCornerShape(8.dp))
-            .clickable {
+            .noRippleClickable {
                 onSelectionChange.invoke(mood)
             },
         verticalAlignment = Alignment.CenterVertically

@@ -17,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
 import ge.sopovardidze.echojournal.core.dropShadow
+import ge.sopovardidze.echojournal.presentation.entries.components.Audio
 import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.presentation.entries.model.RecordModel
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
@@ -51,7 +53,7 @@ fun RecordContent(
                     offsetY = 6.dp
                 )
                 .background(
-                    color = model.mood.gradientStartColor,
+                    color = Color.White,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(horizontal = 10.dp, vertical = 6.dp)
@@ -81,6 +83,12 @@ fun RecordContent(
                             .copy(color = NeutralVariant30)
                     )
                 }
+
+                Audio(
+                    color = model.mood.gradientStartColor.copy(alpha = 0.5f),
+                    timeProgress = "0:00/1:23",
+                    isPlaying = false
+                )
 
                 ExpandableText(
                     text = model.description,

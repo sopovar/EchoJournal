@@ -1,5 +1,7 @@
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -34,15 +36,14 @@ fun ExpandableText(
     textAlign: TextAlign? = null,
     fontSize: TextUnit = 14.sp
 ) {
-    // State variables to track the expanded state, clickable state, and last character index.
     var isExpanded by remember { mutableStateOf(false) }
     var clickable by remember { mutableStateOf(false) }
     var lastCharIndex by remember { mutableStateOf(0) }
 
-    // Box composable containing the Text composable.
     Box(modifier = Modifier
         .clickable(
-            clickable,
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
             onClick = {
                 isExpanded = !isExpanded
             },

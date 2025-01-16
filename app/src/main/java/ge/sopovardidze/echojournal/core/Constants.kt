@@ -113,7 +113,7 @@ object Constants {
             id = "1",
             date = System.currentTimeMillis(),
             mood = mockMoodList[0],
-            topics = mockTopics.subList(0,2),
+            topics = mockTopics.subList(0, 2),
             title = "Today’s Record",
             description = "This is the record for today."
         ),
@@ -121,7 +121,7 @@ object Constants {
             id = "2",
             date = System.currentTimeMillis() - (1000 * 60 * 60 * 24), // 24 hour ago
             mood = mockMoodList[1],
-            topics = mockTopics.subList(1,2),
+            topics = mockTopics.subList(0, 4),
             title = "Yesterday’s Record 1",
             description = "This is the first record for yesterday. This is the first record for yesterday. This is the first record for yesterday. This is the first record for yesterday."
         ),
@@ -129,7 +129,7 @@ object Constants {
             id = "3",
             date = System.currentTimeMillis() - (1000 * 60 * 60 * 26), // 26 hours ago
             mood = mockMoodList[3],
-            topics = mockTopics.subList(2,4),
+            topics = mockTopics.subList(2, 4),
             title = "Yesterday’s Record 2",
             description = "This is the second record for yesterday."
         ),
@@ -137,7 +137,7 @@ object Constants {
             id = "4",
             date = 1673919600000, // 17 January 2025, 12:00 AM
             mood = mockMoodList[4],
-            topics = mockTopics.subList(0,1),
+            topics = mockTopics.subList(0, 1),
             title = "17 January Record 1",
             description = "This is a record for 17 January at noon."
         ),
@@ -145,7 +145,7 @@ object Constants {
             id = "5",
             date = 1673937600000, // 17 January 2025, 6:00 AM
             mood = mockMoodList[2],
-            topics = mockTopics.subList(1,3),
+            topics = mockTopics.subList(1, 3),
             title = "17 January Record 2",
             description = "This is a record for 17 January at 6 AM."
         ),
@@ -153,7 +153,7 @@ object Constants {
             id = "6",
             date = 1673959200000, // 17 January 2025, 9:00 AM
             mood = mockMoodList[2],
-            topics = mockTopics.subList(0,2),
+            topics = mockTopics.subList(0, 2),
             title = "17 January Record 3",
             description = "This is a record for 17 January at 9 AM."
         ),
@@ -161,7 +161,7 @@ object Constants {
             id = "7",
             date = 1673238000000, // 10 January 2025, 12:00 AM
             mood = mockMoodList[0],
-            topics = mockTopics.subList(1,4),
+            topics = mockTopics.subList(1, 4),
             title = "10 January Record 1",
             description = "This is a record for 10 January at midnight."
         ),
@@ -169,7 +169,7 @@ object Constants {
             id = "8",
             date = 1673263200000, // 10 January 2025, 3:00 AM
             mood = mockMoodList[1],
-            topics = mockTopics.subList(3,4),
+            topics = mockTopics.subList(3, 4),
             title = "10 January Record 2",
             description = "This is a record for 10 January at 3 AM."
         ),
@@ -177,7 +177,7 @@ object Constants {
             id = "9",
             date = 1673284800000, // 10 January 2025, 6:00 AM
             mood = mockMoodList[4],
-            topics = mockTopics.subList(1,2),
+            topics = mockTopics.subList(1, 2),
             title = "10 January Record 3",
             description = "This is a record for 10 January at 6 AM."
         ),
@@ -185,7 +185,7 @@ object Constants {
             id = "10",
             date = 1673306400000, // 10 January 2025, 9:00 AM
             mood = mockMoodList[1],
-            topics = mockTopics.subList(0,4),
+            topics = mockTopics.subList(0, 4),
             title = "10 January Record 4",
             description = "This is a record for 10 January at 9 AM."
         )

@@ -41,3 +41,5 @@ val PeacefulEnd = Color(0xFFF991E0)
 
 val ExcitedStart = Color(0xFFF5CB6F)
 val ExcitedEnd = Color(0xFFF6B01A)
+
+val LightBgGray = Color(0xFFF2F2F7)

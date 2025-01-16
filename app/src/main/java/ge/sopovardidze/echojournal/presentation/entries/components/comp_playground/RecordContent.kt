@@ -1,14 +1,18 @@
 package ge.sopovardidze.echojournal.presentation.entries.components.comp_playground
 
 import ExpandableText
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,19 +22,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
+import ge.sopovardidze.echojournal.core.Constants.mockTopics
 import ge.sopovardidze.echojournal.core.dropShadow
 import ge.sopovardidze.echojournal.presentation.entries.components.Audio
 import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
 import ge.sopovardidze.echojournal.presentation.entries.model.RecordModel
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
+import ge.sopovardidze.echojournal.ui.theme.LightBgGray
 import ge.sopovardidze.echojournal.ui.theme.NeutralVariant30
 import ge.sopovardidze.echojournal.ui.theme.PeacefulEnd
 import ge.sopovardidze.echojournal.ui.theme.PeacefulStart
 import ge.sopovardidze.echojournal.ui.theme.Shadow
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RecordContent(
     modifier: Modifier = Modifier,
@@ -93,6 +102,36 @@ fun RecordContent(
                 ExpandableText(
                     text = model.description,
                 )
+
+                if (model.topics.isNullOrEmpty().not()) {
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        model.topics.forEach { topic ->
+                            Row(
+                                modifier = Modifier
+                                    .padding(end = 6.dp, top = 6.dp)
+                                    .background(
+                                        color = LightBgGray,
+                                        shape = CircleShape
+                                    )
+                                    .padding(vertical = 4.dp, horizontal = 10.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.ic_tag),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(color = NeutralVariant30)
+                                )
+                                Text(
+                                    text = topic.title,
+                                    style = MaterialTheme.typography.headlineSmall.copy(
+                                        color = NeutralVariant30
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -115,7 +154,7 @@ private fun RecordContentPreview() {
                     gradientStartColor = PeacefulStart,
                     gradientEndColor = PeacefulEnd
                 ),
-                topics = emptyList(),
+                topics = mockTopics,
                 title = "It was interesting",
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel lacus sed lorem convallis dictum." +
                         "Donec eget leo at erat condimentum non eu risus. Aenean efficitur, ligula sed scelerisque" +

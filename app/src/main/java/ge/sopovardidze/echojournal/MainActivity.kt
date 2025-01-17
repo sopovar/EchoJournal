@@ -5,18 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import ge.sopovardidze.echojournal.presentation.entries.RecordsScreen
-import ge.sopovardidze.echojournal.presentation.entries.EntriesListViewModel
+import ge.sopovardidze.echojournal.presentation.navigation.RootHost
+import ge.sopovardidze.echojournal.presentation.records.RecordsViewModel
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,16 +23,10 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
-                    val viewModel: EntriesListViewModel by viewModels()
-                    val state = viewModel.state.collectAsStateWithLifecycle()
-                    RecordsScreen(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .background(MaterialTheme.colorScheme.inverseOnSurface),
-                        state = state.value,
-                        onAction = {
-                            viewModel.onAction(it)
-                        }
+                    val viewModel: RecordsViewModel by viewModels()
+                    RootHost(
+                        recordsViewModel = viewModel,
+                        innerPadding = innerPadding
                     )
                 }
             }

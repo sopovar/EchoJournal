@@ -2,8 +2,8 @@ package ge.sopovardidze.echojournal.core
 
 import androidx.compose.ui.graphics.Color
 import ge.sopovardidze.echojournal.R
-import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
-import ge.sopovardidze.echojournal.presentation.entries.model.RecordModel
+import ge.sopovardidze.echojournal.presentation.records.model.FilterType
+import ge.sopovardidze.echojournal.presentation.records.model.RecordModel
 import ge.sopovardidze.echojournal.ui.theme.AngryEnd
 import ge.sopovardidze.echojournal.ui.theme.AngryStart
 import ge.sopovardidze.echojournal.ui.theme.ExcitedEnd

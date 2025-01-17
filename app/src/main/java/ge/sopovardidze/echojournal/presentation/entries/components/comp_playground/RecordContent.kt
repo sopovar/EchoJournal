@@ -44,7 +44,6 @@ import ge.sopovardidze.echojournal.ui.theme.Shadow
 fun RecordContent(
     modifier: Modifier = Modifier,
     model: RecordModel,
-    index: Int,
 ) {
     Column(
         modifier = modifier
@@ -161,7 +160,7 @@ private fun RecordContentPreview() {
                         "mollis, libero felis congue mauris, in facilisis risus est a ligula. Vestibulum ac metus at libero" +
                         " luctus dignissim a sed nisl."
             )
-            RecordContent(index = 2, model = mockData)
+            RecordContent(model = mockData)
         }
     }
 }

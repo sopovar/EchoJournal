@@ -11,18 +11,24 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -48,16 +55,18 @@ import ge.sopovardidze.echojournal.core.Constants.TOP_PADDING
 import ge.sopovardidze.echojournal.core.dropShadow
 import ge.sopovardidze.echojournal.presentation.entries.components.FilterItem
 import ge.sopovardidze.echojournal.presentation.entries.components.MoodChip
+import ge.sopovardidze.echojournal.presentation.entries.components.RecordingBottomSheet
 import ge.sopovardidze.echojournal.presentation.entries.components.TopicsChip
 import ge.sopovardidze.echojournal.presentation.entries.components.comp_playground.RecordsList
 import ge.sopovardidze.echojournal.presentation.entries.model.EntriesUiState
 import ge.sopovardidze.echojournal.presentation.entries.model.FilterType
+import ge.sopovardidze.echojournal.presentation.entries.model.RecordState
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.Shadow
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun EntriesListScreen(
+fun RecordsScreen(
     modifier: Modifier = Modifier,
     state: EntriesUiState,
     onAction: (EntriesListAction) -> Unit,
@@ -65,8 +74,14 @@ fun EntriesListScreen(
     var chipsHeight by remember { mutableStateOf(0) }
     var filterBoxBounds by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
 
+    var showBottomSheet by remember { mutableStateOf(true) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false,
+    )
+
     Scaffold(
         modifier = modifier,
+        contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             Row(
                 modifier = Modifier
@@ -89,7 +104,8 @@ fun EntriesListScreen(
         floatingActionButton = {
             SmallFloatingActionButton(
                 onClick = {
-                    onAction.invoke(EntriesListAction.OnFabClick)
+//                    onAction.invoke(EntriesListAction.OnFabClick)
+                    showBottomSheet = true
                 },
                 shape = CircleShape,
                 containerColor = Color.Transparent,
@@ -256,6 +272,22 @@ fun EntriesListScreen(
                 }
             }
         }
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                modifier = Modifier.wrapContentHeight(),
+                sheetState = sheetState,
+                tonalElevation = 12.dp,
+                onDismissRequest = { showBottomSheet = false },
+                scrimColor = Color.Transparent,
+                containerColor = White
+            ) {
+                RecordingBottomSheet(
+                    modifier = Modifier.wrapContentHeight(),
+                    recordState = RecordState.Idle
+                )
+            }
+        }
     }
 }
 
@@ -264,7 +296,7 @@ fun EntriesListScreen(
 @Composable
 private fun EntriesListScreenPreview() {
     EchoJournalTheme {
-        EntriesListScreen(
+        RecordsScreen(
             state = EntriesUiState(),
             onAction = {
 

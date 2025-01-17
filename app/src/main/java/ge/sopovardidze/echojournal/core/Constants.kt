@@ -129,7 +129,7 @@ object Constants {
             id = "3",
             date = System.currentTimeMillis() - (1000 * 60 * 60 * 26), // 26 hours ago
             mood = mockMoodList[3],
-            topics = mockTopics.subList(2, 4),
+            topics = emptyList(),
             title = "Yesterday’s Record 2",
             description = "This is the second record for yesterday."
         ),

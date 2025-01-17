@@ -47,7 +47,6 @@ fun RecordsList(
                     RecordContent(
                         modifier = modifier,
                         model = entry,
-                        index = index
                     )
                 }
             }

@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
 import ge.sopovardidze.echojournal.presentation.create_record.component.EchoButton
+import ge.sopovardidze.echojournal.presentation.create_record.component.TopicTagsCreator
 import ge.sopovardidze.echojournal.presentation.navigation.CreateRecord
 import ge.sopovardidze.echojournal.presentation.records.components.Audio
 import ge.sopovardidze.echojournal.ui.theme.BtnBgColor
@@ -105,7 +106,7 @@ fun CreateRecordScreen(
         }
     ) { padding ->
         Column(
-            modifier = modifier.padding(padding)
+            modifier = Modifier.padding(padding).padding(horizontal = 24.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -143,6 +144,42 @@ fun CreateRecordScreen(
                 isPlaying = false,
                 height = 40.dp
             )
+
+            TopicTagsCreator(
+
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                var description by remember { mutableStateOf("") }
+                Icon(
+                    painter = painterResource(R.drawable.ic_edit),
+                    contentDescription = "description",
+                    tint = NeutralVariant80
+                )
+                TextField(
+                    value = description,
+                    onValueChange = {
+                        description = it
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Description...",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                color = NeutralVariant80
+                            )
+                        )
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                    )
+                )
+            }
         }
     }
 }
@@ -154,8 +191,7 @@ private fun CreateRecordScreenPreview() {
         Surface {
             CreateRecordScreen(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(PaddingValues(24.dp)),
+                    .fillMaxSize(),
                 createRecord = CreateRecord("filePath")
             )
         }

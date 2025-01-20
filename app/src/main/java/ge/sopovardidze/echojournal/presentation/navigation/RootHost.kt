@@ -52,7 +52,6 @@ fun RootHost(
             CreateRecordScreen(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(PurpleGrey80)
                     .padding(innerPadding),
                 createRecord = createRecord
             )

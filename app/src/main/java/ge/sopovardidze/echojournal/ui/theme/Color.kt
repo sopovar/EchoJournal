@@ -43,3 +43,9 @@ val ExcitedStart = Color(0xFFF5CB6F)
 val ExcitedEnd = Color(0xFFF6B01A)
 
 val LightBgGray = Color(0xFFF2F2F7)
+val LightBgBlue = Color(0xFFEEF0FF)
+
+val BtnGradientStart = Color(0xFF578CFF)
+val BtnGradientEnd = Color(0xFF1F70F5)
+val BtnTextColor = Color(0xFF00419C)
+val BtnBgColor = Color(0xFFE1E2EC)

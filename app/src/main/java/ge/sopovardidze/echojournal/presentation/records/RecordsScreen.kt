@@ -68,11 +68,12 @@ fun RecordsScreen(
     modifier: Modifier = Modifier,
     state: RecordsUiState,
     onAction: (RecordListAction) -> Unit,
+    onStartNewRecord: (String) -> Unit = {}
 ) {
     var chipsHeight by remember { mutableStateOf(0) }
     var filterBoxBounds by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
 
-    var showBottomSheet by remember { mutableStateOf(true) }
+    var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
     )
@@ -103,7 +104,8 @@ fun RecordsScreen(
             SmallFloatingActionButton(
                 onClick = {
 //                    onAction.invoke(EntriesListAction.OnFabClick)
-                    showBottomSheet = true
+                   // showBottomSheet = true
+                    onStartNewRecord.invoke("New record file path")
                 },
                 shape = CircleShape,
                 containerColor = Color.Transparent,

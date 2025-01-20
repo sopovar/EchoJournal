@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
 import ge.sopovardidze.echojournal.core.dropShadow
@@ -47,6 +48,7 @@ fun Audio(
     color: Color,
     timeProgress: String,
     isPlaying: Boolean,
+    height: Dp = 44.dp
 ) {
     val shape = CircleShape
     val icon = remember {
@@ -61,7 +63,7 @@ fun Audio(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp)
+            .height(height)
             .background(
                 color = color.copy(alpha = 0.3f),
                 shape = shape

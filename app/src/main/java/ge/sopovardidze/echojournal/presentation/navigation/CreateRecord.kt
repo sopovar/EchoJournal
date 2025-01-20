@@ -3,6 +3,6 @@ package ge.sopovardidze.echojournal.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MakeRecord(
+data class CreateRecord(
     val filePath: String
 )

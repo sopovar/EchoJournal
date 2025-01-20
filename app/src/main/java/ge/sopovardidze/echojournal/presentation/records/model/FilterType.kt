@@ -13,16 +13,15 @@ sealed class FilterType(
     data class Mood(
         val title: String = "",
         val icon: Int,
-        val isSelected: Boolean = false,
+        val outlinedIconRes: Int = R.drawable.ic_mood_stressed_outlined,
+        var isSelected: Boolean = false,
         val gradientStartColor: Color = PeacefulStart,
         val gradientEndColor: Color = PeacefulEnd,
-    ) :
-        FilterType(title, icon, isSelected)
+    ) : FilterType(title, icon, isSelected, )
 
     data class Topics(
         val title: String,
         val icon: Int = R.drawable.ic_tag,
         val isSelected: Boolean = false,
-    ) :
-        FilterType(title, icon, isSelected)
+    ) : FilterType(title, icon, isSelected)
 }

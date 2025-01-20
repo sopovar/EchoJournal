@@ -86,7 +86,7 @@ private fun MoodFilterItemPreview() {
                     mood = FilterType.Mood(
                         "Neutral",
                         R.drawable.ic_mood_neutral,
-                        true
+                        isSelected = true
                     ),
                     onSelectionChange = {}
                 )

@@ -25,6 +25,7 @@ object Constants {
         FilterType.Mood(
             title = "Excited",
             icon = R.drawable.ic_mood_excited,
+            outlinedIconRes = R.drawable.ic_mood_excited_outlined,
             isSelected = true,
             gradientStartColor = ExcitedStart,
             gradientEndColor = ExcitedEnd
@@ -32,6 +33,7 @@ object Constants {
         FilterType.Mood(
             title = "Peaceful",
             icon = R.drawable.ic_mood_peaceful,
+            outlinedIconRes = R.drawable.ic_mood_peaceful_outlined,
             isSelected = false,
             gradientStartColor = PeacefulStart,
             gradientEndColor = PeacefulEnd
@@ -39,6 +41,7 @@ object Constants {
         FilterType.Mood(
             title = "Neutral",
             icon = R.drawable.ic_mood_neutral,
+            outlinedIconRes = R.drawable.ic_mood_neutral_outlined,
             isSelected = false,
             gradientStartColor = NeutralStart,
             gradientEndColor = NeutralEnd
@@ -46,6 +49,7 @@ object Constants {
         FilterType.Mood(
             title = "Sad",
             icon = R.drawable.ic_mood_sad,
+            outlinedIconRes = R.drawable.ic_mood_sad_outlined,
             isSelected = false,
             gradientStartColor = SadStart,
             gradientEndColor = SadEnd
@@ -53,6 +57,7 @@ object Constants {
         FilterType.Mood(
             title = "Stressed",
             icon = R.drawable.ic_mood_engry,
+            outlinedIconRes = R.drawable.ic_mood_stressed_outlined,
             isSelected = false,
             gradientStartColor = AngryStart,
             gradientEndColor = AngryEnd

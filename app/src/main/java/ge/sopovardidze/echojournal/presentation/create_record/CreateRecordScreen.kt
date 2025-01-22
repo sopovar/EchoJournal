@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -24,7 +23,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -46,8 +44,6 @@ import ge.sopovardidze.echojournal.presentation.create_record.component.MoodSele
 import ge.sopovardidze.echojournal.presentation.create_record.component.TopicTagsCreator
 import ge.sopovardidze.echojournal.presentation.navigation.CreateRecord
 import ge.sopovardidze.echojournal.presentation.records.components.Audio
-import ge.sopovardidze.echojournal.presentation.records.components.RecordingBottomSheet
-import ge.sopovardidze.echojournal.presentation.records.model.RecordState
 import ge.sopovardidze.echojournal.ui.theme.BtnBgColor
 import ge.sopovardidze.echojournal.ui.theme.BtnGradientStart
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
@@ -75,7 +71,7 @@ fun CreateRecordScreen(
     Scaffold(
         topBar = {
             Box(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(
                         WindowInsets.statusBars.asPaddingValues()
@@ -185,7 +181,7 @@ fun CreateRecordScreen(
                     },
                     placeholder = {
                         Text(
-                            text = "Description...",
+                            text = "Description... filePath = ${createRecord.filePath}",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 color = NeutralVariant80
                             )

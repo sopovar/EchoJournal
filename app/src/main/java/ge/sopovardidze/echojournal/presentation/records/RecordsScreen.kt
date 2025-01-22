@@ -68,7 +68,7 @@ fun RecordsScreen(
     modifier: Modifier = Modifier,
     state: RecordsUiState,
     onAction: (RecordListAction) -> Unit,
-    onStartNewRecord: (String) -> Unit = {}
+    onStartNewRecord: (String) -> Unit = {},
 ) {
     var chipsHeight by remember { mutableStateOf(0) }
     var filterBoxBounds by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
@@ -103,9 +103,7 @@ fun RecordsScreen(
         floatingActionButton = {
             SmallFloatingActionButton(
                 onClick = {
-//                    onAction.invoke(EntriesListAction.OnFabClick)
-                   // showBottomSheet = true
-                    onStartNewRecord.invoke("New record file path")
+                    showBottomSheet = true
                 },
                 shape = CircleShape,
                 containerColor = Color.Transparent,
@@ -284,7 +282,14 @@ fun RecordsScreen(
             ) {
                 RecordingBottomSheet(
                     modifier = Modifier.wrapContentHeight(),
-                    recordState = RecordState.Idle
+                    recordState = RecordState.Idle,
+                    onDismiss = { fileAbsolutePath ->
+                        Log.e("123123", "absolutePath = ${fileAbsolutePath}")
+                        showBottomSheet = false
+                        if (fileAbsolutePath != null) {
+                            onStartNewRecord.invoke(fileAbsolutePath)
+                        }
+                    }
                 )
             }
         }

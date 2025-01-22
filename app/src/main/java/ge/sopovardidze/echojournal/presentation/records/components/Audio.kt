@@ -1,7 +1,11 @@
 package ge.sopovardidze.echojournal.presentation.records.components
 
+import android.media.MediaPlayer
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,10 +20,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,44 +33,71 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import ge.sopovardidze.echojournal.R
 import ge.sopovardidze.echojournal.core.dropShadow
-import ge.sopovardidze.echojournal.core.noRippleClickable
+import ge.sopovardidze.echojournal.ui.theme.BtnTextColor
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
+import ge.sopovardidze.echojournal.ui.theme.LightBgBlue
+import ge.sopovardidze.echojournal.ui.theme.Secondary80
 import ge.sopovardidze.echojournal.ui.theme.NeutralVariant30
-import ge.sopovardidze.echojournal.ui.theme.PeacefulStart
 import ge.sopovardidze.echojournal.ui.theme.Shadow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import java.io.IOException
 
 @Composable
 fun Audio(
     modifier: Modifier = Modifier,
-    color: Color,
+    recordedFilePath: String? = null,
+    iconColor: Color = BtnTextColor,
+    bgColor: Color = LightBgBlue,
+    indicatorColor: Color = Secondary80,
     timeProgress: String,
-    isPlaying: Boolean,
-    height: Dp = 44.dp
+    height: Dp = 44.dp,
 ) {
     val shape = CircleShape
+    var isPlaying by remember { mutableStateOf(false) }
+    var currentPosition by remember { mutableStateOf(0f) }
+    var duration by remember { mutableStateOf(0) }
     val icon = remember {
         mutableStateOf(
             if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
         )
     }
-    var currentProgress by remember { mutableStateOf(0f) }
-    var loading by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
+
+    var mediaPlayer: MediaPlayer? = null
+    var isPlaybackInitialized by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = recordedFilePath, key2 = isPlaying) {
+        if (isPlaying) {
+            try {
+                while (isPlaying && mediaPlayer?.currentPosition!! < mediaPlayer?.duration!!) {
+                    currentPosition = mediaPlayer?.currentPosition?.toFloat()!!
+                    delay(100)
+                }
+                if (mediaPlayer?.currentPosition!! >= mediaPlayer?.duration!!) {
+                    isPlaying = false
+                    currentPosition = 0f
+                }
+
+            } catch (e: Exception) {
+
+            }
+        }
+    }
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(height)
             .background(
-                color = color.copy(alpha = 0.3f),
+                color = bgColor,
                 shape = shape
             )
             .padding(start = 4.dp, end = 10.dp),
@@ -91,23 +123,39 @@ fun Audio(
             Image(
                 imageVector = ImageVector.vectorResource(icon.value),
                 contentDescription = "Play/Pause",
-                colorFilter = ColorFilter.tint(color),
-                modifier = Modifier.noRippleClickable {
-                    loading = true
-                    scope.launch {
-                        loadProgress { progress ->
-                            currentProgress = progress
+                colorFilter = ColorFilter.tint(iconColor),
+                modifier = Modifier
+                    .clickable {
+                    val uri = Uri.parse("file://${recordedFilePath.toString()}")
+                    if (recordedFilePath != null && !isPlaybackInitialized) {
+                        try {
+                            if (mediaPlayer != null) {
+                                mediaPlayer?.reset()
+                            }
+                            MediaPlayer.create(context, uri).apply {
+                                mediaPlayer = this
+                                duration = this.duration
+                                start()
+                            }
+
+                        } catch (e: IOException) {
+                            Log.e("123123", "Handle media player initialization error = ${e.message}")
                         }
-                        loading = false
+                        isPlaybackInitialized = true
+                        isPlaying = true
+                    } else {
+                        mediaPlayer?.pause()
+                        isPlaying = false
                     }
                 }
             )
         }
 
+        val progress = if (duration > 0) currentPosition / duration else 0f
         LinearProgressIndicator(
-            progress = { currentProgress },
-            color = color,
-            trackColor = color.copy(alpha = 0.5f)
+            progress = { progress },
+            color = indicatorColor,
+            trackColor = iconColor
         )
 
         Text(
@@ -117,14 +165,14 @@ fun Audio(
             )
         )
     }
-}
 
-suspend fun loadProgress(updateProgress: (Float) -> Unit) {
-    for (i in 1..100) {
-        updateProgress(i.toFloat() / 100)
-        delay(100)
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaPlayer?.release()
+        }
     }
 }
+
 
 @Preview
 @Composable
@@ -133,9 +181,8 @@ private fun AudioPreview() {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             Audio(
                 modifier = Modifier.padding(innerPadding),
-                color = PeacefulStart,
                 timeProgress = "0:00/1:23",
-                isPlaying = false
+                recordedFilePath = null
             )
         }
     }

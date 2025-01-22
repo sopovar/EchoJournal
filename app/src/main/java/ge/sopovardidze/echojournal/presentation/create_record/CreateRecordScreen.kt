@@ -1,6 +1,7 @@
 package ge.sopovardidze.echojournal.presentation.create_record
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,14 +39,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
-import ge.sopovardidze.echojournal.core.noRippleClickable
 import ge.sopovardidze.echojournal.presentation.create_record.component.EchoButton
 import ge.sopovardidze.echojournal.presentation.create_record.component.MoodSelectionBottomSheet
 import ge.sopovardidze.echojournal.presentation.create_record.component.TopicTagsCreator
 import ge.sopovardidze.echojournal.presentation.navigation.CreateRecord
 import ge.sopovardidze.echojournal.presentation.records.components.Audio
 import ge.sopovardidze.echojournal.ui.theme.BtnBgColor
-import ge.sopovardidze.echojournal.ui.theme.BtnGradientStart
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.LightBgBlue
 import ge.sopovardidze.echojournal.ui.theme.NeutralVariant50
@@ -56,6 +55,7 @@ import ge.sopovardidze.echojournal.ui.theme.NeutralVariant80
 fun CreateRecordScreen(
     modifier: Modifier = Modifier,
     createRecord: CreateRecord,
+    state: CreateRecordState
 ) {
     val saveButtonEnabled by remember {
         mutableStateOf(false)
@@ -71,7 +71,7 @@ fun CreateRecordScreen(
     Scaffold(
         topBar = {
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         WindowInsets.statusBars.asPaddingValues()
@@ -127,7 +127,7 @@ fun CreateRecordScreen(
                     painter = painterResource(R.drawable.ic_add_mood),
                     contentDescription = "newMood",
                     modifier = Modifier
-                        .noRippleClickable {
+                        .clickable {
                             showBottomSheet = true
                         }
                 )
@@ -154,10 +154,9 @@ fun CreateRecordScreen(
             }
 
             Audio(
-                color = BtnGradientStart,
+                recordedFilePath = state.audioRecord,
                 timeProgress = "0:00/1:23",
-                isPlaying = false,
-                height = 40.dp
+                height = 40.dp,
             )
 
             TopicTagsCreator(
@@ -181,7 +180,7 @@ fun CreateRecordScreen(
                     },
                     placeholder = {
                         Text(
-                            text = "Description... filePath = ${createRecord.filePath}",
+                            text = "Description... filePath = ${createRecord.filePath} \n file = ${state.audioRecord}",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 color = NeutralVariant80
                             )
@@ -228,7 +227,8 @@ private fun CreateRecordScreenPreview() {
             CreateRecordScreen(
                 modifier = Modifier
                     .fillMaxSize(),
-                createRecord = CreateRecord("filePath")
+                createRecord = CreateRecord("filePath"),
+                state = CreateRecordState()
             )
         }
     }

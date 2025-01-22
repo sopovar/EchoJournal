@@ -44,7 +44,7 @@ import java.io.File
 fun RecordingBottomSheet(
     modifier: Modifier = Modifier,
     recordState: RecordState,
-    onDismiss: (String?) -> Unit,
+    onDismiss: (String?, Uri?) -> Unit,
 ) {
     val context = LocalContext.current
     var isRecording by remember { mutableStateOf(false) }
@@ -132,7 +132,7 @@ fun RecordingBottomSheet(
                     modifier = Modifier.clickable {
                         Log.e("123123", "on cancel record click")
                         recorder.stop()
-                        onDismiss.invoke(recordedFile?.absolutePath)
+                        onDismiss.invoke(recordedFile?.absolutePath, recordedFileUri)
                     }
                 )
                 Image(
@@ -144,7 +144,7 @@ fun RecordingBottomSheet(
                             File(context.cacheDir, "audio.mp3").also {
                                 recorder.start(it)
                                 recordedFile = it
-                                recordedFileUri = it.toUri()
+                                recordedFileUri = Uri.fromFile(it)
                             }
                             isRecording = true
                             isPaused = false
@@ -154,7 +154,14 @@ fun RecordingBottomSheet(
                             isRecording = false
                             isPaused = false
                             if (recordedFile != null) {
-                                Log.e("123123", "We got recording = ${recordedFile?.absolutePath}")
+                                Log.e(
+                                    "123123",
+                                    "recordedFile?.absolutePath = ${recordedFile?.absolutePath}"
+                                )
+                                Log.e(
+                                    "123123",
+                                    "recordedFileUri.toString() = ${recordedFileUri.toString()}"
+                                )
                             } else {
                                 Log.e("123123", "We failed recording file")
                             }
@@ -189,7 +196,7 @@ private fun RecordingBottomSheetPreview() {
         Surface {
             RecordingBottomSheet(
                 recordState = RecordState.Recording
-            ) {}
+            ) { file, uri -> }
         }
     }
 }

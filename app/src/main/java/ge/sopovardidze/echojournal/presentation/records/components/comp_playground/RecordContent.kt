@@ -93,9 +93,8 @@ fun RecordContent(
                 }
 
                 Audio(
-                    color = model.mood.gradientStartColor.copy(alpha = 0.5f),
+                    iconColor = model.mood.gradientStartColor.copy(alpha = 0.5f),
                     timeProgress = "0:00/1:23",
-                    isPlaying = false
                 )
 
                 ExpandableText(

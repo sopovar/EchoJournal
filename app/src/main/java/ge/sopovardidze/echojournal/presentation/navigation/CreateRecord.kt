@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateRecord(
-    val filePath: String
+    val filePath: String,
 )

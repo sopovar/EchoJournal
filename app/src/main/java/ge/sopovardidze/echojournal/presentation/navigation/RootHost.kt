@@ -43,7 +43,7 @@ fun RootHost(
                 onAction = {
                     recordsViewModel.onAction(it)
                 },
-                onStartNewRecord = { filePath, uri ->
+                onStartNewRecord = { filePath ->
                     rootController.navigate(
                         route = CreateRecord(filePath)
                     )

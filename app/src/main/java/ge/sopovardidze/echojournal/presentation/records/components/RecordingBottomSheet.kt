@@ -43,16 +43,13 @@ import java.io.File
 @Composable
 fun RecordingBottomSheet(
     modifier: Modifier = Modifier,
-    recordState: RecordState,
-    onDismiss: (String?, Uri?) -> Unit,
+    onDismiss: (String?) -> Unit,
 ) {
     val context = LocalContext.current
     var isRecording by remember { mutableStateOf(false) }
     var isPaused by remember { mutableStateOf(false) }
     var recordedFile by remember { mutableStateOf<File?>(null) }
-    var recordedFileUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Permission handling
     var hasPermission by remember { mutableStateOf(false) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -132,7 +129,7 @@ fun RecordingBottomSheet(
                     modifier = Modifier.clickable {
                         Log.e("123123", "on cancel record click")
                         recorder.stop()
-                        onDismiss.invoke(recordedFile?.absolutePath, recordedFileUri)
+                        onDismiss.invoke(recordedFile?.absolutePath)
                     }
                 )
                 Image(
@@ -144,7 +141,6 @@ fun RecordingBottomSheet(
                             File(context.cacheDir, "audio.mp3").also {
                                 recorder.start(it)
                                 recordedFile = it
-                                recordedFileUri = Uri.fromFile(it)
                             }
                             isRecording = true
                             isPaused = false
@@ -154,14 +150,7 @@ fun RecordingBottomSheet(
                             isRecording = false
                             isPaused = false
                             if (recordedFile != null) {
-                                Log.e(
-                                    "123123",
-                                    "recordedFile?.absolutePath = ${recordedFile?.absolutePath}"
-                                )
-                                Log.e(
-                                    "123123",
-                                    "recordedFileUri.toString() = ${recordedFileUri.toString()}"
-                                )
+                                Log.e("123123", "absolutePath = ${recordedFile?.absolutePath}")
                             } else {
                                 Log.e("123123", "We failed recording file")
                             }
@@ -194,9 +183,7 @@ fun RecordingBottomSheet(
 private fun RecordingBottomSheetPreview() {
     EchoJournalTheme {
         Surface {
-            RecordingBottomSheet(
-                recordState = RecordState.Recording
-            ) { file, uri -> }
+            RecordingBottomSheet {}
         }
     }
 }

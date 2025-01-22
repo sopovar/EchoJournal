@@ -48,6 +48,7 @@ import ge.sopovardidze.echojournal.ui.theme.Secondary80
 import ge.sopovardidze.echojournal.ui.theme.NeutralVariant30
 import ge.sopovardidze.echojournal.ui.theme.Shadow
 import kotlinx.coroutines.delay
+import java.io.File
 import java.io.IOException
 
 @Composable
@@ -63,31 +64,21 @@ fun Audio(
     val shape = CircleShape
     var isPlaying by remember { mutableStateOf(false) }
     var currentPosition by remember { mutableStateOf(0f) }
-    var duration by remember { mutableStateOf(0) }
-    val icon = remember {
-        mutableStateOf(
-            if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
-        )
-    }
+    var duration by remember { mutableStateOf(1) }
+    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
+    val icon = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
 
-    var mediaPlayer: MediaPlayer? = null
-    var isPlaybackInitialized by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-
-    LaunchedEffect(key1 = recordedFilePath, key2 = isPlaying) {
-        if (isPlaying) {
-            try {
-                while (isPlaying && mediaPlayer?.currentPosition!! < mediaPlayer?.duration!!) {
-                    currentPosition = mediaPlayer?.currentPosition?.toFloat()!!
+    LaunchedEffect(isPlaying) {
+        mediaPlayer?.let {
+            if (isPlaying) {
+                while (it.isPlaying) {
+                    currentPosition = it.currentPosition.toFloat()
                     delay(100)
                 }
-                if (mediaPlayer?.currentPosition!! >= mediaPlayer?.duration!!) {
+                if (!it.isPlaying) {
                     isPlaying = false
                     currentPosition = 0f
                 }
-
-            } catch (e: Exception) {
-
             }
         }
     }
@@ -117,45 +108,54 @@ fun Audio(
                     color = White,
                     shape = shape
                 )
-                .clip(shape = shape),
+                .clip(shape),
             contentAlignment = Alignment.Center
         ) {
             Image(
-                imageVector = ImageVector.vectorResource(icon.value),
+                imageVector = ImageVector.vectorResource(icon),
                 contentDescription = "Play/Pause",
                 colorFilter = ColorFilter.tint(iconColor),
-                modifier = Modifier
-                    .clickable {
-                    val uri = Uri.parse("file://${recordedFilePath.toString()}")
-                    if (recordedFilePath != null && !isPlaybackInitialized) {
-                        try {
-                            if (mediaPlayer != null) {
-                                mediaPlayer?.reset()
-                            }
-                            MediaPlayer.create(context, uri).apply {
-                                mediaPlayer = this
-                                duration = this.duration
-                                start()
-                            }
+                modifier = Modifier.clickable {
+                    recordedFilePath?.let { path ->
+                        val file = File(path)
 
-                        } catch (e: IOException) {
-                            Log.e("123123", "Handle media player initialization error = ${e.message}")
+                        if (!file.exists()) {
+                            Log.e("Audio", "Audio file not found: $recordedFilePath")
+                            return@clickable
                         }
-                        isPlaybackInitialized = true
-                        isPlaying = true
-                    } else {
-                        mediaPlayer?.pause()
-                        isPlaying = false
+
+                        if (mediaPlayer == null) {
+                            mediaPlayer = MediaPlayer().apply {
+                                try {
+                                    setDataSource(file.absolutePath)
+                                    prepare()
+                                    duration = this.duration
+                                } catch (e: IOException) {
+                                    Log.e("Audio", "MediaPlayer initialization error: ${e.message}")
+                                    return@clickable
+                                }
+                            }
+                        }
+
+                        mediaPlayer?.let {
+                            if (it.isPlaying) {
+                                it.pause()
+                                isPlaying = false
+                            } else {
+                                it.start()
+                                isPlaying = true
+                            }
+                        }
                     }
-                }
+                },
             )
         }
 
         val progress = if (duration > 0) currentPosition / duration else 0f
         LinearProgressIndicator(
             progress = { progress },
-            color = indicatorColor,
-            trackColor = iconColor
+            color = iconColor,
+            trackColor = indicatorColor
         )
 
         Text(
@@ -169,6 +169,9 @@ fun Audio(
     DisposableEffect(Unit) {
         onDispose {
             mediaPlayer?.release()
+            mediaPlayer = null
+            isPlaying = false
+            currentPosition = 0f
         }
     }
 }

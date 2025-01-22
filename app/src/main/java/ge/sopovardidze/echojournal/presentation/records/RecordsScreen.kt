@@ -1,6 +1,5 @@
 package ge.sopovardidze.echojournal.presentation.records
 
-import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -69,7 +68,7 @@ fun RecordsScreen(
     modifier: Modifier = Modifier,
     state: RecordsUiState,
     onAction: (RecordListAction) -> Unit,
-    onStartNewRecord: (String, Uri?) -> Unit = {f,u ->},
+    onStartNewRecord: (String) -> Unit = {},
 ) {
     var chipsHeight by remember { mutableStateOf(0) }
     var filterBoxBounds by remember { mutableStateOf<androidx.compose.ui.geometry.Rect?>(null) }
@@ -283,11 +282,10 @@ fun RecordsScreen(
             ) {
                 RecordingBottomSheet(
                     modifier = Modifier.wrapContentHeight(),
-                    recordState = RecordState.Idle,
-                    onDismiss = { fileAbsolutePath, uri ->
+                    onDismiss = { fileAbsolutePath ->
                         showBottomSheet = false
                         if (fileAbsolutePath != null) {
-                            onStartNewRecord.invoke(fileAbsolutePath, uri)
+                            onStartNewRecord.invoke(fileAbsolutePath)
                         }
                     }
                 )

@@ -82,7 +82,7 @@ fun MoodSelectionBottomSheet(
                                     mood.copy(isSelected = false)
                                 }
                             }
-                            onMoodSelection.invoke(it)
+//                            onMoodSelection.invoke(it)
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
@@ -124,7 +124,7 @@ fun MoodSelectionBottomSheet(
                 modifier = Modifier
                     .weight(3f)
                     .noRippleClickable {
-
+                        moods.value.find { it.isSelected }?.let { onMoodSelection.invoke(it) }
                     },
                 text = "Confirm",
                 textColor = if (isConfirmEnabled.value) Color.White else NeutralVariant50,

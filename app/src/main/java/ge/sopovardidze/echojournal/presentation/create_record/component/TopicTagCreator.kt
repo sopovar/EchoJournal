@@ -1,6 +1,5 @@
 package ge.sopovardidze.echojournal.presentation.create_record.component
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,16 +51,16 @@ import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.LightBgGray
 import ge.sopovardidze.echojournal.ui.theme.NeutralVariant30
 import ge.sopovardidze.echojournal.ui.theme.NeutralVariant80
-import ge.sopovardidze.echojournal.ui.theme.Purple80
 import ge.sopovardidze.echojournal.ui.theme.Secondary10
 import ge.sopovardidze.echojournal.ui.theme.Shadow
 import kotlinx.coroutines.android.awaitFrame
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TopicTagsCreator(
     modifier: Modifier = Modifier,
+    topics: MutableSet<String>,
+    onSelectionChange: (Set<String>) -> Unit
 ) {
     var newTopic by remember { mutableStateOf("") }
     var isTyping by remember { mutableStateOf(false) }
@@ -71,9 +70,7 @@ fun TopicTagsCreator(
         )
     }
     var selectedTopics by remember {
-        mutableStateOf<Set<String>>(
-            emptySet()
-        )
+        mutableStateOf<Set<String>>(topics)
     }
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
@@ -108,6 +105,7 @@ fun TopicTagsCreator(
                     text = topic,
                     onDelete = { topicToDelete ->
                         selectedTopics = selectedTopics - topicToDelete
+                        onSelectionChange.invoke(selectedTopics)
                     }
                 )
             }
@@ -142,6 +140,7 @@ fun TopicTagsCreator(
                     keyboardActions = KeyboardActions(
                         onDone = {
                             selectedTopics = selectedTopics + newTopic
+                            onSelectionChange.invoke(selectedTopics)
                             newTopic = ""
                             isTyping = false
                             keyboard?.hide()
@@ -179,6 +178,7 @@ fun TopicTagsCreator(
                                 .padding(vertical = 8.dp)
                                 .noRippleClickable {
                                     selectedTopics = selectedTopics + it
+                                    onSelectionChange.invoke(selectedTopics)
                                     isTyping = false
                                     keyboard?.hide()
                                 },
@@ -254,7 +254,10 @@ fun TopicHashTag(
 private fun TopicTagsCreatorPreview() {
     EchoJournalTheme {
         Surface {
-            TopicTagsCreator()
+            TopicTagsCreator(
+                topics = mutableSetOf("Family", "Love"),
+                onSelectionChange = {}
+            )
         }
     }
 }

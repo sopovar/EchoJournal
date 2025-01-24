@@ -1,5 +1,6 @@
 package ge.sopovardidze.echojournal.presentation.create_record
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
@@ -55,14 +57,9 @@ import ge.sopovardidze.echojournal.ui.theme.NeutralVariant80
 fun CreateRecordScreen(
     modifier: Modifier = Modifier,
     createRecord: CreateRecord,
-    state: CreateRecordState
+    state: CreateRecordState,
+    onAction: (CreateRecordActions) -> Unit,
 ) {
-    val saveButtonEnabled by remember {
-        mutableStateOf(false)
-    }
-    var recordTitle by remember {
-        mutableStateOf("")
-    }
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
@@ -109,32 +106,37 @@ fun CreateRecordScreen(
                 EchoButton(
                     modifier = Modifier.weight(3f),
                     text = "Save",
-                    textColor = if (saveButtonEnabled) Color.White else NeutralVariant50,
-                    isEnabled = saveButtonEnabled,
-                    bgColor = BtnBgColor
+                    textColor = if (state.isBtnEnabled()) Color.White else NeutralVariant50,
+                    isEnabled = state.isBtnEnabled(),
+                    bgColor = BtnBgColor,
                 )
             }
         }
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding).padding(horizontal = 24.dp)
+            modifier = Modifier
+                .padding(padding)
+                .padding(horizontal = 24.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val iconRes =
+                    if (state.selectedMood != null) state.selectedMood.iconRes else R.drawable.ic_add_mood
                 Image(
-                    painter = painterResource(R.drawable.ic_add_mood),
+                    painter = painterResource(iconRes),
                     contentDescription = "newMood",
                     modifier = Modifier
+                        .size(40.dp)
                         .clickable {
                             showBottomSheet = true
                         }
                 )
                 TextField(
-                    value = recordTitle,
+                    value = state.title ?: "",
                     onValueChange = {
-                        recordTitle = it
+                        onAction.invoke(CreateRecordActions.SetTitle(it))
                     },
                     placeholder = {
                         Text(
@@ -160,27 +162,29 @@ fun CreateRecordScreen(
             )
 
             TopicTagsCreator(
-
+                topics = state.topics,
+                onSelectionChange = {
+                    onAction.invoke(CreateRecordActions.SetSelectedTopics(it))
+                }
             )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                var description by remember { mutableStateOf("") }
                 Icon(
                     painter = painterResource(R.drawable.ic_edit),
                     contentDescription = "description",
                     tint = NeutralVariant80
                 )
                 TextField(
-                    value = description,
-                    onValueChange = {
-                        description = it
+                    value = state.description ?: "",
+                    onValueChange = { desc ->
+                        onAction.invoke(CreateRecordActions.SetDescription(desc))
                     },
                     placeholder = {
                         Text(
-                            text = "Description... filePath = ${createRecord.filePath} \n file = ${state.audioRecord}",
+                            text = "Description...",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 color = NeutralVariant80
                             )
@@ -208,7 +212,8 @@ fun CreateRecordScreen(
                 MoodSelectionBottomSheet(
                     modifier = Modifier.wrapContentHeight(),
                     onMoodSelection = {
-
+                        onAction.invoke(CreateRecordActions.NewMoodSelected(it))
+                        showBottomSheet = false
                     },
                     onCancel = {
                         showBottomSheet = false
@@ -228,7 +233,8 @@ private fun CreateRecordScreenPreview() {
                 modifier = Modifier
                     .fillMaxSize(),
                 createRecord = CreateRecord("filePath"),
-                state = CreateRecordState()
+                state = CreateRecordState(),
+                onAction = {}
             )
         }
     }

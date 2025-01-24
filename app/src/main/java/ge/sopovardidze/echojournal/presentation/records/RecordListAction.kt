@@ -11,4 +11,5 @@ sealed interface RecordListAction {
     object OnTopicsClear: RecordListAction
     object OnFabClick: RecordListAction
     object OnOutsideBoundsClick: RecordListAction
+    data class OnStartNewRecord(val filePath: String): RecordListAction
 }

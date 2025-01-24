@@ -13,8 +13,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import ge.sopovardidze.echojournal.presentation.create_record.CreateRecordActions
 import ge.sopovardidze.echojournal.presentation.create_record.CreateRecordScreen
 import ge.sopovardidze.echojournal.presentation.create_record.CreateRecordViewModel
+import ge.sopovardidze.echojournal.presentation.records.RecordListAction
 import ge.sopovardidze.echojournal.presentation.records.RecordsScreen
 import ge.sopovardidze.echojournal.presentation.records.RecordsViewModel
 import ge.sopovardidze.echojournal.ui.theme.PurpleGrey80
@@ -41,13 +43,18 @@ fun RootHost(
                     .background(MaterialTheme.colorScheme.inverseOnSurface),
                 state = state.value,
                 onAction = {
-                    recordsViewModel.onAction(it)
+                    when (it) {
+                        is RecordListAction.OnStartNewRecord -> {
+                            rootController.navigate(
+                                route = CreateRecord(it.filePath)
+                            )
+                        }
+
+                        else -> {
+                            recordsViewModel.onAction(it)
+                        }
+                    }
                 },
-                onStartNewRecord = { filePath ->
-                    rootController.navigate(
-                        route = CreateRecord(filePath)
-                    )
-                }
             )
         }
 
@@ -60,7 +67,23 @@ fun RootHost(
                     .fillMaxSize()
                     .padding(innerPadding),
                 createRecord = createRecord,
-                state = state.value
+                state = state.value,
+                onAction = { action ->
+                    when (action) {
+                        is CreateRecordActions.NewMoodSelected -> {
+                            createRecordViewModel.setMood(action.mood)
+                        }
+                        is CreateRecordActions.SetTitle -> {
+                            createRecordViewModel.setTitle(action.title)
+                        }
+                        is CreateRecordActions.SetDescription -> {
+                            createRecordViewModel.setDescription(action.description)
+                        }
+                        is CreateRecordActions.SetSelectedTopics -> {
+                            createRecordViewModel.setTopics(action.topics)
+                        }
+                    }
+                }
             )
         }
     }

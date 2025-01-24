@@ -38,6 +38,10 @@ class RecordsViewModel: ViewModel() {
             RecordListAction.OnOutsideBoundsClick -> {
                 close()
             }
+
+            is RecordListAction.OnStartNewRecord -> {
+
+            }
         }
     }
 

@@ -17,7 +17,7 @@ sealed class FilterType(
         var isSelected: Boolean = false,
         val gradientStartColor: Color = PeacefulStart,
         val gradientEndColor: Color = PeacefulEnd,
-    ) : FilterType(title, icon, isSelected, )
+    ) : FilterType(title, icon, isSelected)
 
     data class Topics(
         val title: String,

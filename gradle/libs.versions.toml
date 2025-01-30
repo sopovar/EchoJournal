@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-kotlin = "2.0.20-RC"
+kotlin = "2.1.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,10 +15,11 @@ composeLifeVer = "2.8.6"
 navVersion = "2.8.5"
 serialization = "1.6.3"
 activity = "1.9.3"
-kspVersion = "2.0.20-RC-1.0.24"
-hiltVersion = "2.51.1"
+kspVersion = "2.1.0-1.0.29"
+hiltVersion = "2.55"
+hiltCompiler = "2.51.1"
 hiltComposeNavigationVer = "1.2.0"
-roomKtx = "2.7.0-alpha01"
+roomKtx = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,7 +47,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltVersion" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltCompiler" }
 hilt-compose-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltComposeNavigationVer" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomKtx" }

@@ -98,7 +98,7 @@ fun RecordContent(
                 )
 
                 ExpandableText(
-                    text = model.description,
+                    text = model.description ?: "",
                 )
 
                 if (model.topics.isNullOrEmpty().not()) {

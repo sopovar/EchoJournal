@@ -92,27 +92,6 @@ object Constants {
         ),
     )
 
-    fun getMockRecords(): List<RecordModel> {
-        val today = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 10)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-        }.timeInMillis
-
-        val yesterday = Calendar.getInstance().apply {
-            add(Calendar.DATE, -1)
-        }.timeInMillis
-
-        val jan17 = Calendar.getInstance().apply {
-            set(2025, Calendar.JANUARY, 17)
-        }.timeInMillis
-
-        val jan10 = Calendar.getInstance().apply {
-            set(2025, Calendar.JANUARY, 10)
-        }.timeInMillis
-        return emptyList()
-    }
-
     val mockDataList = listOf(
         RecordModel(
             id = "1",

@@ -1,4 +1,4 @@
-package ge.sopovardidze.echojournal
+package ge.sopovardidze.echojournal.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,14 +19,10 @@ import ge.sopovardidze.echojournal.presentation.create_record.CreateRecordViewMo
 import ge.sopovardidze.echojournal.presentation.records.RecordListAction
 import ge.sopovardidze.echojournal.presentation.records.RecordsScreen
 import ge.sopovardidze.echojournal.presentation.records.RecordsViewModel
-import ge.sopovardidze.echojournal.ui.theme.PurpleGrey80
-import java.io.File
 
 @Composable
 fun RootHost(
     modifier: Modifier = Modifier,
-    recordsViewModel: RecordsViewModel,
-    createRecordViewModel: CreateRecordViewModel,
     innerPadding: PaddingValues,
 ) {
     val rootController = rememberNavController()
@@ -36,6 +32,7 @@ fun RootHost(
         startDestination = Records
     ) {
         composable<Records> {
+            val recordsViewModel = hiltViewModel<RecordsViewModel>()
             val state = recordsViewModel.state.collectAsStateWithLifecycle()
             RecordsScreen(
                 modifier = Modifier
@@ -59,6 +56,7 @@ fun RootHost(
         }
 
         composable<CreateRecord> { backStackEntry ->
+            val createRecordViewModel = hiltViewModel<CreateRecordViewModel>()
             val createRecord: CreateRecord = backStackEntry.toRoute()
             val state = createRecordViewModel.state.collectAsStateWithLifecycle()
             createRecordViewModel.setAudio(createRecord.filePath)

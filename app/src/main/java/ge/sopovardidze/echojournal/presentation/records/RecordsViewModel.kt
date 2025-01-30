@@ -1,12 +1,18 @@
 package ge.sopovardidze.echojournal.presentation.records
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import ge.sopovardidze.echojournal.domain.usecases.GetAllRecordsUseCase
 import ge.sopovardidze.echojournal.presentation.records.model.RecordsUiState
 import ge.sopovardidze.echojournal.presentation.records.model.FilterType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class RecordsViewModel: ViewModel() {
+@HiltViewModel
+class RecordsViewModel @Inject constructor(
+    private val getAllRecordsUseCase: GetAllRecordsUseCase
+): ViewModel() {
 
     var state = MutableStateFlow(RecordsUiState())
         private set

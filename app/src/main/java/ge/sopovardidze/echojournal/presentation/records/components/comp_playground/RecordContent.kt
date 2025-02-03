@@ -121,7 +121,7 @@ fun RecordContent(
                                     colorFilter = ColorFilter.tint(color = NeutralVariant30)
                                 )
                                 Text(
-                                    text = topic.title,
+                                    text = topic,
                                     style = MaterialTheme.typography.headlineSmall.copy(
                                         color = NeutralVariant30
                                     )
@@ -152,7 +152,7 @@ private fun RecordContentPreview() {
                     gradientStartColor = PeacefulStart,
                     gradientEndColor = PeacefulEnd
                 ),
-                topics = mockTopics,
+                topics = mockTopics.map { it.title },
                 title = "It was interesting",
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel lacus sed lorem convallis dictum." +
                         "Donec eget leo at erat condimentum non eu risus. Aenean efficitur, ligula sed scelerisque" +

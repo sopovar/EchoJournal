@@ -103,8 +103,8 @@ fun RecordsScreen(
         floatingActionButton = {
             SmallFloatingActionButton(
                 onClick = {
-//                    showBottomSheet = true
-                    onAction.invoke(RecordListAction.OnStartNewRecord("fileAbsolutePath"))
+                    showBottomSheet = true
+//                    onAction.invoke(RecordListAction.OnStartNewRecord("fileAbsolutePath"))
                 },
                 shape = CircleShape,
                 containerColor = Color.Transparent,
@@ -132,7 +132,7 @@ fun RecordsScreen(
                 }
         ) {
 
-            if (state.pageIsEmpty) {
+            if (state.records.isEmpty()) {
                 Column(
                     modifier = Modifier
                         .padding(padding)
@@ -203,7 +203,11 @@ fun RecordsScreen(
                                 )
                             }
                         }
-                        RecordsList()
+                        if (state.records.isNotEmpty()) {
+                            RecordsList(
+                                records = state.records
+                            )
+                        }
                     }
                     val listToShow = if (state.isMoodChipActive) {
                         state.moodList

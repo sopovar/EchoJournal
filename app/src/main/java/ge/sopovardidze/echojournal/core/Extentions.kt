@@ -13,10 +13,9 @@ import ge.sopovardidze.echojournal.ui.theme.PeacefulStart
 import ge.sopovardidze.echojournal.ui.theme.SadEnd
 import ge.sopovardidze.echojournal.ui.theme.SadStart
 
-
 fun String.toMood(): FilterType.Mood {
     return when (this) {
-        equals("Excited").toString() -> FilterType.Mood(
+        "Excited" -> FilterType.Mood(
             title = "Excited",
             icon = R.drawable.ic_mood_excited,
             outlinedIconRes = R.drawable.ic_mood_excited_outlined,
@@ -25,7 +24,7 @@ fun String.toMood(): FilterType.Mood {
             gradientEndColor = ExcitedEnd
         )
 
-        equals("Peaceful").toString() -> FilterType.Mood(
+        "Peaceful" -> FilterType.Mood(
             title = "Peaceful",
             icon = R.drawable.ic_mood_peaceful,
             outlinedIconRes = R.drawable.ic_mood_peaceful_outlined,
@@ -34,7 +33,7 @@ fun String.toMood(): FilterType.Mood {
             gradientEndColor = PeacefulEnd
         )
 
-        equals("Neutral").toString() -> FilterType.Mood(
+        "Neutral" -> FilterType.Mood(
             title = "Neutral",
             icon = R.drawable.ic_mood_neutral,
             outlinedIconRes = R.drawable.ic_mood_neutral_outlined,
@@ -43,7 +42,7 @@ fun String.toMood(): FilterType.Mood {
             gradientEndColor = NeutralEnd
         )
 
-        equals("Sad").toString() -> FilterType.Mood(
+        "Sad" -> FilterType.Mood(
             title = "Sad",
             icon = R.drawable.ic_mood_sad,
             outlinedIconRes = R.drawable.ic_mood_sad_outlined,

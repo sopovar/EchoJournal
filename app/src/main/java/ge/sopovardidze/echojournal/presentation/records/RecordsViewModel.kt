@@ -1,12 +1,15 @@
 package ge.sopovardidze.echojournal.presentation.records
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.sopovardidze.echojournal.domain.usecases.GetAllRecordsUseCase
 import ge.sopovardidze.echojournal.presentation.records.model.RecordsUiState
 import ge.sopovardidze.echojournal.presentation.records.model.FilterType
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,6 +19,19 @@ class RecordsViewModel @Inject constructor(
 
     var state = MutableStateFlow(RecordsUiState())
         private set
+
+    fun getRecords() {
+        viewModelScope.launch {
+            getAllRecordsUseCase.invoke().collectLatest { cachedRecords ->
+                state.update {
+                    it.copy(
+                        records = cachedRecords
+                    )
+                }
+            }
+        }
+    }
+
 
     fun onAction(action: RecordListAction) {
         when(action) {

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.core.Constants.mockDataList
+import ge.sopovardidze.echojournal.presentation.records.model.RecordModel
 import ge.sopovardidze.echojournal.presentation.records.model.formattedDate
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
 import ge.sopovardidze.echojournal.ui.theme.Purple80
@@ -18,8 +19,9 @@ import ge.sopovardidze.echojournal.ui.theme.Secondary50
 @Composable
 fun RecordsList(
     modifier: Modifier = Modifier,
+    records: List<RecordModel> = emptyList()
 ) {
-    val groupedEntries = mockDataList.groupBy { it.formattedDate() }
+    val groupedEntries = records.groupBy { it.formattedDate() }
 
     LazyColumn(
         modifier = modifier

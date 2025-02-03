@@ -11,7 +11,7 @@ data class RecordModel(
     val id: String,
     val date: Long,
     val mood: FilterType.Mood,
-    val topics: List<FilterType.Topics> = emptyList(),
+    val topics: List<String> = emptyList(),
     val title: String,
     val description: String?,
 ) {
@@ -30,7 +30,7 @@ data class RecordModel(
             mood = mood.title,
             title = title,
             description = description ?: "",
-            topics = Converters().fromTopics(topics)
+            topics = Converters().fromTopics(topics.map { it })
         )
     }
 }

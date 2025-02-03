@@ -7,4 +7,5 @@ sealed interface CreateRecordActions {
     data class SetTitle(val title: String): CreateRecordActions
     data class SetDescription(val description: String): CreateRecordActions
     data class SetSelectedTopics(val topics: Set<String>): CreateRecordActions
+    object InsertRecord: CreateRecordActions
 }

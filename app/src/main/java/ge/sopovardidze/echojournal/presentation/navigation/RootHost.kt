@@ -6,9 +6,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -34,6 +40,13 @@ fun RootHost(
         composable<Records> {
             val recordsViewModel = hiltViewModel<RecordsViewModel>()
             val state = recordsViewModel.state.collectAsStateWithLifecycle()
+
+            val lifecycleOwner = LocalLifecycleOwner.current
+            LaunchedEffect(Unit) {
+                lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    recordsViewModel.getRecords()
+                }
+            }
             RecordsScreen(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -60,6 +73,18 @@ fun RootHost(
             val createRecord: CreateRecord = backStackEntry.toRoute()
             val state = createRecordViewModel.state.collectAsStateWithLifecycle()
             createRecordViewModel.setAudio(createRecord.filePath)
+
+            val recordInsertedState by createRecordViewModel.recordInserted.collectAsState()
+
+            LaunchedEffect(recordInsertedState) {
+                if (recordInsertedState == true) {
+                    rootController.popBackStack()
+                    createRecordViewModel.resetInsertionState()
+                } else if (recordInsertedState == false) {
+                    createRecordViewModel.resetInsertionState()
+                }
+            }
+
             CreateRecordScreen(
                 modifier = Modifier
                     .fillMaxSize()
@@ -79,6 +104,10 @@ fun RootHost(
                         }
                         is CreateRecordActions.SetSelectedTopics -> {
                             createRecordViewModel.setTopics(action.topics)
+                        }
+
+                        CreateRecordActions.InsertRecord -> {
+                            createRecordViewModel.createRecord()
                         }
                     }
                 }

@@ -16,12 +16,12 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromTopics(topics: List<FilterType.Topics>): String {
-        return topics.joinToString(",") { it.title }
+    fun fromTopics(topics: List<String>): String {
+        return topics.joinToString(",") { it }
     }
 
     @TypeConverter
-    fun toTopics(topicsString: String): List<FilterType.Topics> {
-        return topicsString.split(",").map { FilterType.Topics(title = it) }
+    fun toTopics(topicsString: String): List<String> {
+        return topicsString.split(",").map {  it }
     }
 }

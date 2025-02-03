@@ -1,6 +1,5 @@
 package ge.sopovardidze.echojournal.presentation.create_record
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ge.sopovardidze.echojournal.R
+import ge.sopovardidze.echojournal.core.noRippleClickable
 import ge.sopovardidze.echojournal.presentation.create_record.component.EchoButton
 import ge.sopovardidze.echojournal.presentation.create_record.component.MoodSelectionBottomSheet
 import ge.sopovardidze.echojournal.presentation.create_record.component.TopicTagsCreator
@@ -104,7 +104,9 @@ fun CreateRecordScreen(
                 )
 
                 EchoButton(
-                    modifier = Modifier.weight(3f),
+                    modifier = Modifier.weight(3f).noRippleClickable {
+                        onAction.invoke(CreateRecordActions.InsertRecord)
+                    },
                     text = "Save",
                     textColor = if (state.isBtnEnabled()) Color.White else NeutralVariant50,
                     isEnabled = state.isBtnEnabled(),

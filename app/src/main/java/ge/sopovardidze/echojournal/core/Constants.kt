@@ -20,6 +20,7 @@ import kotlin.random.Random
 object Constants {
 
     const val TOP_PADDING = 200
+    const val INITIAL_TIME = "00:00:00"
 
     val mockMoodList = listOf(
         FilterType.Mood(

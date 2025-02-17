@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,8 +33,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ge.sopovardidze.echojournal.R
+import ge.sopovardidze.echojournal.core.Constants.INITIAL_TIME
+import ge.sopovardidze.echojournal.core.formatTime
 import ge.sopovardidze.echojournal.core.noRippleClickable
+import ge.sopovardidze.echojournal.presentation.records.RecordListAction
 import ge.sopovardidze.echojournal.presentation.records.model.RecordState
 import ge.sopovardidze.echojournal.presentation.records.recorder.EchoAudioRecorder
 import ge.sopovardidze.echojournal.ui.theme.EchoJournalTheme
@@ -43,7 +48,9 @@ import java.io.File
 @Composable
 fun RecordingBottomSheet(
     modifier: Modifier = Modifier,
-    onDismiss: (String?) -> Unit,
+    onDismiss: (String?, String?) -> Unit,
+    timer: Long,
+    action: (RecordListAction) -> Unit
 ) {
     val context = LocalContext.current
     var isRecording by remember { mutableStateOf(false) }
@@ -105,9 +112,8 @@ fun RecordingBottomSheet(
             text = title,
             style = MaterialTheme.typography.headlineMedium
         )
-
         Text(
-            text = "00:00:00",
+            text = timer.formatTime(),
             style = MaterialTheme.typography.bodySmall.copy(color = NeutralVariant30)
         )
 
@@ -127,9 +133,9 @@ fun RecordingBottomSheet(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_cancel_recod),
                     contentDescription = "cancelRecord",
                     modifier = Modifier.clickable {
-                        Log.e("123123", "on cancel record click")
                         recorder.stop()
-                        onDismiss.invoke(recordedFile?.absolutePath)
+                        recordedFile?.delete()
+                        onDismiss.invoke(null, null)
                     }
                 )
                 Image(
@@ -138,19 +144,25 @@ fun RecordingBottomSheet(
                     modifier = Modifier.noRippleClickable {
                         if (!isRecording) {
                             Log.e("123123", "on start record click")
-                            File(context.cacheDir, "audio.mp3").also {
+                            File(context.cacheDir, "audio_${System.currentTimeMillis()}.mp3").also {
                                 recorder.start(it)
                                 recordedFile = it
+                                action.invoke(RecordListAction.StartTimer)
                             }
                             isRecording = true
                             isPaused = false
                         } else {
                             Log.e("123123", "on stop record click")
                             recorder.stop()
+                            action.invoke(RecordListAction.StopTimer)
                             isRecording = false
                             isPaused = false
                             if (recordedFile != null) {
-                                Log.e("123123", "absolutePath = ${recordedFile?.absolutePath}")
+                                Log.e("123123", "absolutePath = ${recordedFile?.absolutePath} \n time = ${timer.formatTime()}")
+                                onDismiss.invoke(
+                                    recordedFile?.absolutePath,
+                                    timer.formatTime()
+                                )
                             } else {
                                 Log.e("123123", "We failed recording file")
                             }
@@ -164,10 +176,12 @@ fun RecordingBottomSheet(
                         Log.e("123123", "on PAUSE")
                         if (isRecording && isPaused) {
                             recorder.resume()
+                            action.invoke(RecordListAction.StartTimer)
                             isPaused = false
                             isRecording = true
                         } else if (isRecording) {
                             recorder.pause()
+                            action.invoke(RecordListAction.PauseTimer)
                             isRecording = false
                             isPaused = true
                         }
@@ -183,7 +197,11 @@ fun RecordingBottomSheet(
 private fun RecordingBottomSheetPreview() {
     EchoJournalTheme {
         Surface {
-            RecordingBottomSheet {}
+            RecordingBottomSheet(
+                onDismiss = { _, _ -> },
+                timer = 1L,
+                action = {}
+            )
         }
     }
 }

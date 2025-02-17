@@ -1,12 +1,16 @@
 package ge.sopovardidze.echojournal.presentation.records
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.sopovardidze.echojournal.domain.usecases.GetAllRecordsUseCase
 import ge.sopovardidze.echojournal.presentation.records.model.RecordsUiState
 import ge.sopovardidze.echojournal.presentation.records.model.FilterType
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,6 +23,47 @@ class RecordsViewModel @Inject constructor(
 
     var state = MutableStateFlow(RecordsUiState())
         private set
+
+    private var timerJob: Job? = null
+    private var isRecording = false
+    private var count = 0L
+
+    private fun startTimer() {
+        timerJob?.cancel()
+        isRecording = true
+        timerJob = viewModelScope.launch {
+            while (isRecording) {
+                delay(1000)
+                count++
+                state.update {
+                    it.copy(
+                        timer = count
+                    )
+                }
+            }
+        }
+    }
+
+    private fun pauseTimer() {
+        isRecording = false
+        timerJob?.cancel()
+    }
+
+    private fun stopTimer() {
+        isRecording = false
+        count = 0L
+        state.update {
+            it.copy(
+                timer = 0L
+            )
+        }
+        timerJob?.cancel()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timerJob?.cancel()
+    }
 
     fun getRecords() {
         viewModelScope.launch {
@@ -63,6 +108,15 @@ class RecordsViewModel @Inject constructor(
 
             is RecordListAction.OnStartNewRecord -> {
 
+            }
+            RecordListAction.StartTimer -> {
+                startTimer()
+            }
+            RecordListAction.PauseTimer -> {
+                pauseTimer()
+            }
+            RecordListAction.StopTimer -> {
+                stopTimer()
             }
         }
     }

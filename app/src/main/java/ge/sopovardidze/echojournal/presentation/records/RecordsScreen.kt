@@ -287,12 +287,16 @@ fun RecordsScreen(
             ) {
                 RecordingBottomSheet(
                     modifier = Modifier.wrapContentHeight(),
-                    onDismiss = { fileAbsolutePath ->
+                    onDismiss = { fileAbsolutePath, time ->
                         showBottomSheet = false
                         if (fileAbsolutePath != null) {
-                            onAction.invoke(RecordListAction.OnStartNewRecord(fileAbsolutePath))
+                            onAction.invoke(RecordListAction.OnStartNewRecord(fileAbsolutePath, time))
                         }
-                    }
+                    },
+                    action = {
+                        onAction.invoke(it)
+                    },
+                    timer = state.timer
                 )
             }
         }

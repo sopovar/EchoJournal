@@ -9,5 +9,6 @@ data class RecordsUiState(
     val isMoodChipActive: Boolean = false,
     val isTopicsChipActive: Boolean = false,
     val pageIsEmpty: Boolean = false,
-    val records: List<RecordModel> = emptyList()
+    val records: List<RecordModel> = emptyList(),
+    var timer: Long = 0L
 )

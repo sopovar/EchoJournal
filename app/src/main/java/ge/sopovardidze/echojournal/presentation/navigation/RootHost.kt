@@ -56,7 +56,7 @@ fun RootHost(
                     when (it) {
                         is RecordListAction.OnStartNewRecord -> {
                             rootController.navigate(
-                                route = CreateRecord(it.filePath)
+                                route = CreateRecord(it.filePath, it.time)
                             )
                         }
 
@@ -72,7 +72,7 @@ fun RootHost(
             val createRecordViewModel = hiltViewModel<CreateRecordViewModel>()
             val createRecord: CreateRecord = backStackEntry.toRoute()
             val state = createRecordViewModel.state.collectAsStateWithLifecycle()
-            createRecordViewModel.setAudio(createRecord.filePath)
+            createRecordViewModel.setAudioAndTime(createRecord.filePath, createRecord.time)
 
             val recordInsertedState by createRecordViewModel.recordInserted.collectAsState()
 

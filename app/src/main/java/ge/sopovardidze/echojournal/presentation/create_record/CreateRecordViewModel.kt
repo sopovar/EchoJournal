@@ -1,6 +1,5 @@
 package ge.sopovardidze.echojournal.presentation.create_record
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,10 +50,11 @@ class CreateRecordViewModel @Inject constructor(
         _recordInserted.value = null
     }
 
-    fun setAudio(audio: String) {
+    fun setAudioAndTime(audio: String, time: String?) {
         state.update {
             it.copy(
-                audioRecord = audio
+                audioRecord = audio,
+                time = time
             )
         }
     }

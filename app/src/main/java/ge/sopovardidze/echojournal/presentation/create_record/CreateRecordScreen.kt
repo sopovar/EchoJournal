@@ -159,7 +159,7 @@ fun CreateRecordScreen(
 
             Audio(
                 recordedFilePath = state.audioRecord,
-                timeProgress = "0:00/1:23",
+                timeProgress = "${state.time}",
                 height = 40.dp,
             )
 
@@ -234,7 +234,7 @@ private fun CreateRecordScreenPreview() {
             CreateRecordScreen(
                 modifier = Modifier
                     .fillMaxSize(),
-                createRecord = CreateRecord("filePath"),
+                createRecord = CreateRecord("filePath", "00:00"),
                 state = CreateRecordState(),
                 onAction = {}
             )

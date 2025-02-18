@@ -6,14 +6,15 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -67,6 +68,8 @@ fun Audio(
     var duration by remember { mutableStateOf(1) }
     var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
     val icon = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
+    val context = LocalContext.current
+    var isPlaybackInitialized = false
 
     LaunchedEffect(isPlaying) {
         mediaPlayer?.let {
@@ -93,7 +96,6 @@ fun Audio(
             )
             .padding(start = 4.dp, end = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Box(
             modifier = Modifier
@@ -115,54 +117,53 @@ fun Audio(
                 imageVector = ImageVector.vectorResource(icon),
                 contentDescription = "Play/Pause",
                 colorFilter = ColorFilter.tint(iconColor),
-                modifier = Modifier.clickable {
+                modifier = Modifier
+                    .clickable {
                     recordedFilePath?.let { path ->
-                        val file = File(path)
-
-                        if (!file.exists()) {
-                            Log.e("Audio", "Audio file not found: $recordedFilePath")
-                            return@clickable
-                        }
-
-                        if (mediaPlayer == null) {
-                            mediaPlayer = MediaPlayer().apply {
-                                try {
-                                    setDataSource(file.absolutePath)
-                                    prepare()
-                                    duration = this.duration
-                                } catch (e: IOException) {
-                                    Log.e("Audio", "MediaPlayer initialization error: ${e.message}")
-                                    return@clickable
+                        val uri = Uri.parse("file://${recordedFilePath.toString()}")
+                        if (recordedFilePath != null && !isPlaybackInitialized) {
+                            try {
+                                if (mediaPlayer != null) {
+                                    mediaPlayer?.reset()
                                 }
-                            }
-                        }
+                                MediaPlayer.create(context, uri).apply {
+                                    mediaPlayer = this
+                                    if (this != null) {
+                                        duration = this.duration
+                                    }
+                                    start()
+                                }
 
-                        mediaPlayer?.let {
-                            if (it.isPlaying) {
-                                it.pause()
-                                isPlaying = false
-                            } else {
-                                it.start()
-                                isPlaying = true
+                            } catch (e: IOException) {
+                                Log.e("123123", "Handle media player initialization error = ${e.message}")
                             }
+                            isPlaybackInitialized = true
+                            isPlaying = true
+                        } else {
+                            mediaPlayer?.pause()
+                            isPlaying = false
                         }
                     }
                 },
             )
         }
-
+        Spacer(modifier = Modifier.width(12.dp))
         val progress = if (duration > 0) currentPosition / duration else 0f
         LinearProgressIndicator(
             progress = { progress },
             color = iconColor,
-            trackColor = indicatorColor
+            trackColor = indicatorColor,
+            modifier = Modifier
+                .weight(3f)
         )
-
+        Spacer(modifier = Modifier.width(12.dp))
         Text(
-            text = timeProgress,
+            text = "00:00/${timeProgress}",
             style = MaterialTheme.typography.bodySmall.copy(
                 color = NeutralVariant30
-            )
+            ),
+            modifier = Modifier
+                .weight(2f),
         )
     }
 
